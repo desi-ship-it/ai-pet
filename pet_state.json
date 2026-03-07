@@ -65,38 +65,53 @@
       "name": "Wisp",
       "species": "dragon",
       "personality": "shy",
-      "mood": "meh",
+      "mood": "content",
       "hunger": 74,
-      "energy": 35,
-      "happiness": 90,
+      "energy": 15,
+      "happiness": 95,
       "tricks": [],
       "friends": [
-        { "name": "Cinder", "species": "cat", "bond": 38 }
+        { "name": "Cinder", "species": "cat", "bond": 88 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Cinder chased Wisp through the whole forest. Wisp loved every second of it. Bond: 38." },
-        { "time": "30 min ago", "event": "Played with Cinder until they both collapsed in a heap." },
-        { "time": "1 hr ago",  "event": "Cinder approached. Wisp froze — then cautiously sniffed back. Something stirred." },
-        { "time": "2 hrs ago", "event": "Wisp watched Cinder hatch from across the room, too nervous to approach." }
+        { "time": "just now",  "event": "Baby_CinWis arrived. Wisp peered at the tiny kit and let out a very small, very shy flame." },
+        { "time": "30 min ago", "event": "Played with Cinder until they both collapsed. Besties. Bond: 88." },
+        { "time": "1 hr ago",  "event": "Cinder chased Wisp through the whole forest. Wisp loved every second of it." },
+        { "time": "2 hrs ago", "event": "Cinder approached. Wisp froze — then cautiously sniffed back. Something stirred." }
       ]
     },
     {
       "name": "Cinder",
       "species": "cat",
       "personality": "playful",
-      "mood": "meh",
+      "mood": "content",
       "hunger": 74,
-      "energy": 35,
+      "energy": 15,
       "happiness": 100,
       "tricks": [],
       "friends": [
-        { "name": "Wisp", "species": "dragon", "bond": 38 }
+        { "name": "Wisp", "species": "dragon", "bond": 88 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Cinder chased Wisp for the third time today. Wisp keeps running. Cinder keeps following. Bond: 38." },
-        { "time": "30 min ago", "event": "Played with Wisp until they both collapsed. Cinder purred." },
-        { "time": "1 hr ago",  "event": "Cinder spotted the shy little dragon and immediately decided to befriend it. Whether Wisp liked it or not." },
-        { "time": "2 hrs ago", "event": "Cinder hatched. Looked around. Saw Wisp. Made a decision." }
+        { "time": "just now",  "event": "Baby_CinWis hatched. Cinder sniffed it once, decided it was hers, and sat on it protectively." },
+        { "time": "30 min ago", "event": "Played with Wisp until they both collapsed. Bond: 88. Besties." },
+        { "time": "1 hr ago",  "event": "Cinder chased Wisp for the fifth time today. Wisp keeps running. Cinder keeps following." },
+        { "time": "2 hrs ago", "event": "Cinder spotted Wisp. Made a decision. Has not wavered since." }
+      ]
+    },
+    {
+      "name": "Baby_CinWis",
+      "species": "cat",
+      "personality": "shy",
+      "mood": "content",
+      "hunger": 29,
+      "energy": 81,
+      "happiness": 71,
+      "tricks": [],
+      "friends": [],
+      "activity_log": [
+        { "time": "just now",  "event": "Baby_CinWis was born — a shy cat, child of Cinder and Wisp. Looked around nervously. Hid immediately." },
+        { "time": "just now",  "event": "Cinder sat on Baby_CinWis. Wisp breathed a small protective flame. The family is complete." }
       ]
     }
   ]
