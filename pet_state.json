@@ -1,5 +1,6 @@
 {
   "featured": "Ember",
+  "last_hatch": null,
   "pets": [
     {
       "name": "Ember",
@@ -14,7 +15,7 @@
         { "name": "Pebble", "species": "bunny", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Ember was fed. Hunger eased to 29. She breathed a tiny flame of satisfaction." },
+        { "time": "just now",  "event": "Ember was fed. She breathed a tiny flame of satisfaction." },
         { "time": "5 min ago", "event": "Played with Pebble. Bond strengthened to 85. Happiness maxed." },
         { "time": "1 hr ago",  "event": "Ember collapsed after an exhausting flight. Energy fully depleted." },
         { "time": "2 hrs ago", "event": "Ember soared high above the Cliffs of Aretia." },

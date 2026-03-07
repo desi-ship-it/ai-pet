@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dragon Sanctum</title>
+<title>EMBER</title>
 <style>
   /* ============================================================
      TOKENS & RESET
@@ -586,6 +586,131 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+
+  /* ============================================================
+     EGG VAULT
+  ============================================================ */
+  .vault-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .mystery-egg {
+    font-size: 3.8rem;
+    animation: eggBob 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(212,170,53,0.55));
+    line-height: 1;
+    transition: all 0.4s;
+  }
+  @keyframes eggBob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50%       { transform: translateY(-14px) rotate(4deg); }
+  }
+  .egg-cta {
+    font-size: 0.76rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-align: center;
+    font-style: italic;
+  }
+  .last-hatch-banner {
+    background: rgba(212,170,53,0.07);
+    border: 1px solid rgba(212,170,53,0.3);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    width: 100%;
+  }
+  .last-hatch-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .last-hatch-emoji  { font-size: 1.8rem; margin-bottom: 4px; display: block; }
+  .last-hatch-name   { font-size: 1rem; color: var(--parchment); margin-bottom: 4px; }
+  .last-hatch-flavor { font-size: 0.76rem; color: var(--muted); font-style: italic; line-height: 1.55; margin-top: 6px; }
+  .rarity-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .rarity-common    { background: rgba(160,174,192,0.12); color: #a0aec0; border: 1px solid rgba(160,174,192,0.3); }
+  .rarity-uncommon  { background: rgba(99,179,237,0.12);  color: #63b3ed; border: 1px solid rgba(99,179,237,0.3); }
+  .rarity-rare      { background: rgba(183,148,246,0.12); color: #b794f4; border: 1px solid rgba(183,148,246,0.3); }
+  .rarity-legendary { background: rgba(212,170,53,0.18);  color: var(--gold); border: 1px solid rgba(212,170,53,0.5); }
+  .dismiss-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--muted);
+    padding: 4px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .dismiss-btn:hover { border-color: rgba(255,255,255,0.35); color: var(--parchment); }
+
+  /* ============================================================
+     HOW TO PLAY
+  ============================================================ */
+  .htp-intro {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 22px;
+    max-width: 640px;
+  }
+  .prompt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .prompt-chip {
+    background: rgba(200,60,20,0.07);
+    border: 1px solid rgba(200,60,20,0.22);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: var(--parchment);
+    font-style: italic;
+    line-height: 1.45;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .prompt-chip:hover { border-color: rgba(200,60,20,0.5); background: rgba(200,60,20,0.12); }
+  .prompt-chip::before {
+    content: '›';
+    color: var(--ember);
+    margin-right: 7px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  .rarity-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .rarity-tier-label {
+    font-size: 0.64rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 2px;
+  }
 </style>
 </head>
 <body>
@@ -600,11 +725,11 @@
 <div id="app" style="display:none">
 
   <header class="sanctum-title">
-    <h1>Dragon Sanctum</h1>
+    <h1>EMBER</h1>
     <div class="rune-divider">
-      <span></span><em>⚔ ✦ ⚔</em><span></span>
+      <span></span><em>✦ ◈ ✦</em><span></span>
     </div>
-    <p class="subtitle">Fourth Wing · Basgiath War College</p>
+    <p class="subtitle">where wild things live</p>
   </header>
 
   <div class="pet-tabs" id="petTabs"></div>
@@ -664,15 +789,53 @@
       <div id="friendList"></div>
     </div>
 
+    <!-- Egg Vault -->
+    <div class="card" id="eggVaultCard">
+      <div class="card-title">The Vault</div>
+      <div class="vault-inner">
+        <div class="mystery-egg" id="mysteryEgg">🥚</div>
+        <p class="egg-cta">Ask Claude to hatch it</p>
+        <div id="lastHatchBanner" style="display:none"></div>
+      </div>
+    </div>
+
     <!-- Activity Log -->
     <div class="card full">
       <div class="card-title">Chronicle</div>
       <ul class="log-list" id="activityLog"></ul>
     </div>
 
+    <!-- How to Play -->
+    <div class="card full">
+      <div class="card-title">The AI Pet World</div>
+      <p class="htp-intro">
+        EMBER is an AI-native pet world. Your pets are cared for through conversation — not buttons.
+        Talk to Claude, and watch the world respond. Feed them, train them, introduce them to friends,
+        hatch mystery eggs. Every creature has a personality. Every bond is earned.
+        This isn't a game you click through. It's a world you talk into existence.
+      </p>
+      <div class="prompt-grid">
+        <div class="prompt-chip">"Hatch me an egg"</div>
+        <div class="prompt-chip">"Feed all my pets"</div>
+        <div class="prompt-chip">"Introduce Pebble to Baby_EmbPeb"</div>
+        <div class="prompt-chip">"Train Ember to breathe fire"</div>
+        <div class="prompt-chip">"Play with Baby_EmbPeb"</div>
+        <div class="prompt-chip">"How are all my pets doing?"</div>
+        <div class="prompt-chip">"What mood is Ember in?"</div>
+        <div class="prompt-chip">"Mate Ember and Pebble"</div>
+      </div>
+      <div class="rarity-legend">
+        <span class="rarity-tier-label">Egg rarity</span>
+        <span class="rarity-badge rarity-common">⬜ Common · bunny, dog</span>
+        <span class="rarity-badge rarity-uncommon">🔵 Uncommon · cat</span>
+        <span class="rarity-badge rarity-rare">🟣 Rare · dragon</span>
+        <span class="rarity-badge rarity-legendary">🟡 Legendary · secret</span>
+      </div>
+    </div>
+
   </div>
 
-  <div class="footer"><span class="live-dot"></span>Live · syncs every 8s · All dragons bond or burn</div>
+  <div class="footer"><span class="live-dot"></span>Live · syncs every 8s · All creatures bond or burn</div>
 </div>
 
 <script>
@@ -757,43 +920,95 @@
 ============================================================ */
 const SPRITES = {
   dragon: {
-    palette: { r: '#c8102e', o: '#ff6b1a', g: '#d4aa35', d: '#7a1a1a', e: '#ff4757', _: null },
-    // 14 cols x 14 rows  (r=red, o=orange, g=gold, d=dark, e=ember, _=transparent)
+    // r=crimson body, o=orange belly, g=gold, d=dark outline, w=white eye, _=transparent
+    palette: { r: '#c8102e', o: '#ff8c42', g: '#d4aa35', d: '#5a0f0f', w: '#fff8f0', _: null },
     map: [
-      '_____rr__rr____',
-      '____rrrrrrrr___',
-      '____rogrorgg___',
-      '___rrrrrrrrrd__',
-      '__rrroooooorddd',
-      '_rrorooooorrdd_',
-      'rrooroooooord__',
-      'rroooooooood___',
-      '_rroooooord____',
-      '__rroogord_____',
-      '___rrrgrd______',
-      '____rrrr_______',
-      '___rrr_rrr_____',
-      '__rr_____rr____',
+      '____gg__gg____',  // horns
+      '___rrgrrgrrrr_',  // horn bases
+      '__rrrrrrrrrrrr',  // head top
+      '__rowrrrrworrr',  // eyes (w=white, o=iris)
+      '__rrrroorrrrr_',  // snout
+      '___rroooorrr__',  // chin
+      '_rrrooooooord_',  // chest + wing edge start
+      'drroooooooorrd',  // wings spread (d=dark membrane)
+      'drroooooooorrd',  // wing body
+      '_rroooooooord_',  // lower body
+      '__rroooooorrr_',  // belly
+      '___rroooorrrd_',  // hips + tail
+      '___rr____rr___',  // legs
+      '__rgg____ggr__',  // gold-tipped claws
+      '___r______r___',  // toe shadows
     ],
-    size: 7,
+    size: 8,
   },
   bunny: {
-    palette: { w: '#e8dcc8', p: '#f4a0c0', b: '#c9b99a', d: '#a08060', _: null },
+    // w=cream fur, p=pink, b=brown paw, d=dark eye, _=transparent
+    palette: { w: '#f4ede4', p: '#f5a0b8', b: '#b89878', d: '#4a3020', _: null },
     map: [
-      '_ww____ww______',
-      'www____www_____',
-      'wwwwwwwwww_____',
-      'wpwwwwwwpw_____',
-      'wwwwwwwwww_____',
-      '_wwwwwwwww_____',
-      '__wwwwwww______',
-      '__wwwwwww______',
-      '__wwwwwww______',
-      '__wwwwwww______',
-      '__wwwwwww______',
-      '__ww___ww______',
+      '__ww______ww__',  // tall ear tips
+      '_wwww____wwww_',  // ears
+      '_wwpw____wpww_',  // ear inner pink
+      '__wwwwwwwwww__',  // ear bases
+      '_wwwwwwwwwwww_',  // head
+      '_wdwwwwwwwdww_',  // eyes
+      '__wwwwwwwwwww_',  // cheeks
+      '___wwppwwww___',  // nose (pp = two pink dots)
+      '__wwwwwwwwww__',  // chin
+      '_wwwwwwwwwwww_',  // body top
+      'wwwwwwwwwwwwww',  // body wide
+      '_wwwwwwwwwwww_',  // body
+      '__wwwwwwwwww__',  // lower body
+      '___bwwwwwwwb__',  // front paws (b=brown)
+      '____bb____bb__',  // paw bottoms
+      '_____b____b___',  // toes
     ],
-    size: 7,
+    size: 8,
+  },
+  cat: {
+    // s=slate body, l=light belly patches, w=white eye, d=dark pupil, p=pink nose, _=transparent
+    palette: { s: '#7a6a5a', l: '#b8a882', w: '#fff8f0', d: '#251810', p: '#e88898', _: null },
+    map: [
+      '__ss______ss__',  // pointy ear tips
+      '_ssss____ssss_',  // ear fill
+      '_lssl____lssl_',  // ear inner lighter
+      '__sssssssssss_',  // head top
+      '_sslsssssslss_',  // lighter cheek patches
+      '__sdwsssswdss_',  // eyes (d=slit pupil, w=white)
+      '__sssssssssss_',  // puffy cheeks
+      '___sssspssss__',  // pink nose
+      '___ssssssss___',  // chin
+      '___sssssssss__',  // neck
+      '__ssslllssss__',  // body + lighter belly
+      '__ssssssssss__',  // body
+      '__ssssssssss_s',  // body + tail begins
+      '___sss__sss_ss',  // legs + tail curve
+      '____ss__ss__ss',  // paws + tail curl
+      '____s____s____',  // toe tips
+    ],
+    size: 8,
+  },
+  dog: {
+    // b=golden fur, l=light muzzle, w=white teeth, d=dark, p=pink tongue/nose, _=transparent
+    palette: { b: '#c89048', l: '#e8c870', w: '#fff8f0', d: '#5a3010', p: '#f08080', _: null },
+    map: [
+      'bb__________bb',  // floppy ears drooping wide
+      '_bb__bbbbb__bb',  // ears
+      '_bbbbbbbbbbbbb',  // head
+      '_bllbbbbbbbllb',  // lighter face patches
+      '_bdwbbbbbbbwdb',  // eyes (d=dark, w=white)
+      '__bbbbbbbbbbb_',  // muzzle top
+      '__bllllllllbb_',  // muzzle lighter
+      '__bbb_pp_bbb__',  // nose dots (p=pink)
+      '___bwwwwwwb___',  // open mouth + teeth
+      '___bppppppb___',  // tongue
+      '____bbbbbbb___',  // chin
+      '___bbbbbbbbb__',  // chest
+      '___bbbbbbbbb__',  // body
+      '___bb______bb_',  // upper legs
+      '____b______b__',  // lower legs
+      '____b_______b_',  // paws
+    ],
+    size: 8,
   },
 };
 
@@ -1018,6 +1233,44 @@ function buildTabs(pets, featured, onSelect) {
 }
 
 /* ============================================================
+   EGG HATCH REVEAL
+============================================================ */
+function renderLastHatch(data) {
+  const banner = document.getElementById('lastHatchBanner');
+  if (!banner || !data.last_hatch) return;
+  const h   = data.last_hatch;
+  const key = [h.name, h.species, h.rarity].join('_');
+  if (sessionStorage.getItem('ember_hatch_seen') === key) return;
+
+  const rarityClass = 'rarity-' + (h.rarity || 'common');
+  banner.innerHTML = `
+    <div class="last-hatch-banner">
+      <div class="last-hatch-label">Recently Hatched</div>
+      <span class="last-hatch-emoji">${speciesEmoji(h.species)}</span>
+      <div class="last-hatch-name">${h.name}</div>
+      <span class="rarity-badge ${rarityClass}">${h.rarity || 'common'}</span>
+      <p class="last-hatch-flavor">${h.flavor || ''}</p>
+      <button class="dismiss-btn" id="hatchDismiss">Dismiss</button>
+    </div>
+  `;
+  banner.style.display = 'block';
+
+  document.getElementById('hatchDismiss').addEventListener('click', () => {
+    sessionStorage.setItem('ember_hatch_seen', key);
+    banner.style.display = 'none';
+    document.getElementById('mysteryEgg').textContent = '🥚';
+  });
+
+  // dramatic egg reveal sequence
+  const egg = document.getElementById('mysteryEgg');
+  if (egg) {
+    egg.textContent = '🥚';
+    setTimeout(() => { egg.textContent = '🐣'; }, 400);
+    setTimeout(() => { egg.textContent = speciesEmoji(h.species); }, 1800);
+  }
+}
+
+/* ============================================================
    BOOT + LIVE POLLING
 ============================================================ */
 let currentPetName = null;
@@ -1061,6 +1314,7 @@ function loadData() {
         if (current) renderPet(current);
       }
 
+      renderLastHatch(data);
       const dot = document.querySelector('.live-dot');
       if (dot) dot.style.background = '#48bb78';
     })
