@@ -172,6 +172,16 @@
     image-rendering: auto;
   }
 
+  .scene-sprite-emoji {
+    font-size: 72px;
+    line-height: 1;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .scene-egg-img {
     width: 70px;
     height: 70px;
@@ -277,6 +287,16 @@
     object-fit: contain;
     display: block;
     image-rendering: auto;
+  }
+
+  .pet-sprite-emoji {
+    font-size: 130px;
+    line-height: 1;
+    width: 170px;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Mood badge */
@@ -851,7 +871,7 @@ const PET_IMAGES = {
 };
 
 function petImageSrc(pet) {
-  return PET_IMAGES[pet.name] || 'ember.png';
+  return PET_IMAGES[pet.name] || null;
 }
 
 const SPECIES_GLOW = {
@@ -863,14 +883,22 @@ const SPECIES_GLOW = {
 };
 
 function buildPixelArt(pet) {
-  const el = document.getElementById('pixelDragon');
+  const el  = document.getElementById('pixelDragon');
   el.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = petImageSrc(pet);
-  img.alt = pet.name;
-  img.className = 'pet-sprite-img';
-  img.draggable = false;
-  el.appendChild(img);
+  const src = petImageSrc(pet);
+  if (src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = pet.name;
+    img.className = 'pet-sprite-img';
+    img.draggable = false;
+    el.appendChild(img);
+  } else {
+    const em = document.createElement('div');
+    em.className = 'pet-sprite-emoji';
+    em.textContent = speciesEmoji(pet.species);
+    el.appendChild(em);
+  }
   el.style.cssText = 'position:relative;';
   el.dataset.baseFilter = SPECIES_GLOW[pet.species] || SPECIES_GLOW.dragon;
 }
@@ -1019,18 +1047,26 @@ function renderHomeScene(pets) {
     const stateClass = moodStateFor(pet);
     const glow = SPECIES_GLOW[pet.species] || SPECIES_GLOW.dragon;
 
-    const img = document.createElement('img');
-    img.src = petImageSrc(pet);
-    img.alt = pet.name;
-    img.className = 'scene-sprite-img ' + stateClass;
-    img.draggable = false;
-    img.style.filter = NEUTRAL_STATES.includes(stateClass) ? glow : '';
+    const src = petImageSrc(pet);
+    let spriteEl;
+    if (src) {
+      spriteEl = document.createElement('img');
+      spriteEl.src = src;
+      spriteEl.alt = pet.name;
+      spriteEl.draggable = false;
+      spriteEl.className = 'scene-sprite-img ' + stateClass;
+    } else {
+      spriteEl = document.createElement('div');
+      spriteEl.className = 'scene-sprite-emoji ' + stateClass;
+      spriteEl.textContent = speciesEmoji(pet.species);
+    }
+    spriteEl.style.filter = NEUTRAL_STATES.includes(stateClass) ? glow : '';
 
     const label = document.createElement('div');
     label.className = 'scene-pet-label';
     label.innerHTML = `${pet.name}<br><span style="font-size:1rem;letter-spacing:0">${moodEmoji(pet.mood)}</span>`;
 
-    petEl.appendChild(img);
+    petEl.appendChild(spriteEl);
     petEl.appendChild(label);
     petEl.addEventListener('click', () => showProfile(pet));
     container.appendChild(petEl);

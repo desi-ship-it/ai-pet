@@ -1,19 +1,19 @@
 {
   "featured": "Ember",
   "last_hatch": {
-    "name": "Wisp",
-    "species": "dragon",
-    "personality": "shy",
-    "rarity": "rare",
-    "flavor": "The egg trembled for a long moment... then went perfectly still. Just as you turned away — it shattered. A tiny dragon tumbled out and immediately hid behind your boot, peering up with enormous, frightened eyes. A shy dragon. They almost never hatch."
+    "name": "Cinder",
+    "species": "cat",
+    "personality": "playful",
+    "rarity": "uncommon",
+    "flavor": "The shell cracked once. Then went still. You leaned in — and a paw shot out and bopped you on the nose. Cinder tumbled free, looked around at the world, and immediately started batting at everything in reach. A playful cat. Already causing problems."
   },
   "pets": [
     {
       "name": "Ember",
       "species": "dragon",
       "personality": "wild",
-      "mood": "meh",
-      "hunger": 29,
+      "mood": "content",
+      "hunger": 0,
       "energy": 0,
       "happiness": 100,
       "tricks": [],
@@ -21,9 +21,9 @@
         { "name": "Pebble", "species": "bunny", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "A new dragon was born from a mystery egg. Ember sniffed the air suspiciously." },
-        { "time": "1 hr ago",  "event": "Ember was fed. She breathed a tiny flame of satisfaction." },
-        { "time": "2 hrs ago", "event": "Played with Pebble. Bond strengthened to 85." },
+        { "time": "just now",  "event": "Cinder hatched nearby. Ember opened one eye, decided it wasn't a threat, and went back to digesting." },
+        { "time": "1 hr ago",  "event": "Ember was fed a big meal. Ate carefully, then licked the bowl clean. Mood lifted to content." },
+        { "time": "2 hrs ago", "event": "Ember refused to play. Too tired. Flopped over dramatically." },
         { "time": "3 hrs ago", "event": "Ember collapsed after an exhausting flight. Energy fully depleted." }
       ]
     },
@@ -40,9 +40,9 @@
         { "name": "Ember", "species": "dragon", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Pebble sensed the new hatchling and hid under a rock. Shy recognizes shy." },
-        { "time": "1 hr ago",  "event": "Pebble played hard, then crashed immediately after. Energy depleted." },
-        { "time": "2 hrs ago", "event": "Pebble was fed. Hunger dropped to 54." }
+        { "time": "just now",  "event": "Pebble heard Cinder hatch and immediately retreated to the furthest corner of the room." },
+        { "time": "1 hr ago",  "event": "Pebble sensed the new hatchling and hid under a rock. Shy recognizes shy." },
+        { "time": "2 hrs ago", "event": "Pebble played hard, then crashed immediately after. Energy depleted." }
       ]
     },
     {
@@ -56,7 +56,7 @@
       "tricks": [],
       "friends": [],
       "activity_log": [
-        { "time": "just now",  "event": "Baby_EmbPeb spotted the new hatchling and immediately tried to wrestle it." },
+        { "time": "just now",  "event": "Baby_EmbPeb immediately tried to wrestle Cinder. Cinder bopped them on the snout. They are now best enemies." },
         { "time": "1 hr ago",  "event": "Baby_EmbPeb went absolutely feral during play. Something got knocked over." },
         { "time": "2 hrs ago", "event": "Baby_EmbPeb was fed. Thoroughly stuffed." }
       ]
@@ -72,8 +72,24 @@
       "tricks": [],
       "friends": [],
       "activity_log": [
-        { "time": "just now",  "event": "Wisp hatched from a mystery egg. Immediately hid behind the nearest boot." },
-        { "time": "just now",  "event": "Wisp looked around with wide, frightened eyes. The world is very large." }
+        { "time": "just now",  "event": "Wisp watched Cinder hatch from across the room, too nervous to approach." },
+        { "time": "1 hr ago",  "event": "Wisp hatched from a mystery egg. Immediately hid behind the nearest boot." },
+        { "time": "2 hrs ago", "event": "Wisp looked around with wide, frightened eyes. The world is very large." }
+      ]
+    },
+    {
+      "name": "Cinder",
+      "species": "cat",
+      "personality": "playful",
+      "mood": "happy",
+      "hunger": 40,
+      "energy": 90,
+      "happiness": 75,
+      "tricks": [],
+      "friends": [],
+      "activity_log": [
+        { "time": "just now",  "event": "Cinder hatched from a mystery egg. Immediately bopped you on the nose. Uncommon rarity." },
+        { "time": "just now",  "event": "Cinder looked around the world and started batting at everything in sight." }
       ]
     }
   ]
