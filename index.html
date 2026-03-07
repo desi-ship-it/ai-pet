@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dragon Sanctum</title>
+<style>
+  /* ============================================================
+     TOKENS & RESET
+  ============================================================ */
+  :root {
+    --bg:        #05040d;
+    --surface:   rgba(12, 8, 28, 0.82);
+    --border:    rgba(180, 80, 30, 0.25);
+    --glow:      rgba(200, 60, 20, 0.18);
+    --crimson:   #c8102e;
+    --gold:      #d4aa35;
+    --violet:    #7c3aed;
+    --ember:     #ff6b1a;
+    --parchment: #e8dcc8;
+    --muted:     rgba(232, 220, 200, 0.45);
+    --bar-h:     10px;
+    --radius:    14px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--parchment);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ============================================================
+     BACKGROUND — embers / stars
+  ============================================================ */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ============================================================
+     LAYOUT
+  ============================================================ */
+  #app {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ============================================================
+     HEADER
+  ============================================================ */
+  .sanctum-title {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .sanctum-title h1 {
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--ember) 50%, var(--crimson) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 18px rgba(212,170,53,0.4));
+    line-height: 1.15;
+  }
+
+  .sanctum-title .subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* rune divider */
+  .rune-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px auto 0;
+    max-width: 320px;
+  }
+  .rune-divider span { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold)); }
+  .rune-divider span:last-child { background: linear-gradient(to left, transparent, var(--gold)); }
+  .rune-divider em { color: var(--gold); font-style: normal; font-size: 1.1rem; opacity: 0.7; }
+
+  /* ============================================================
+     PET TABS (if multiple dragons)
+  ============================================================ */
+  .pet-tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .pet-tab {
+    padding: 7px 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    border-radius: 40px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  .pet-tab:hover { border-color: var(--ember); color: var(--parchment); }
+  .pet-tab.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,170,53,0.08);
+    box-shadow: 0 0 14px rgba(212,170,53,0.2);
+  }
+
+  /* ============================================================
+     HERO — dragon display
+  ============================================================ */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .dragon-stage {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* glow ring */
+  .dragon-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--stage-glow, rgba(200,60,20,0.22)) 0%, transparent 70%);
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { transform: scale(1);   opacity: 0.8; }
+    50%       { transform: scale(1.12); opacity: 1; }
+  }
+
+  /* pixel art dragon via box-shadow */
+  .pixel-dragon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    image-rendering: pixelated;
+    /* animation applied dynamically via state class */
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px)  rotate(-1deg); }
+    50%       { transform: translateY(-14px) rotate(1deg); }
+  }
+
+  .pixel-dragon .px {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Mood badge */
+  .mood-badge {
+    margin-top: 14px;
+    padding: 5px 18px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 1px solid currentColor;
+  }
+
+  /* ============================================================
+     IDENTITY CARD
+  ============================================================ */
+  .identity {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .identity .pet-name {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    background: linear-gradient(135deg, var(--parchment), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+  }
+
+  .identity .meta {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    padding: 4px 14px;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+  }
+  .badge.species  { border-color: rgba(124,58,237,0.5); color: #b794f4; }
+  .badge.personality { border-color: rgba(200,60,20,0.5); color: #fc8181; }
+
+  /* ============================================================
+     GRID LAYOUT
+  ============================================================ */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .grid .full { grid-column: 1 / -1; }
+
+  /* ============================================================
+     CARD
+  ============================================================ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color 0.3s;
+  }
+
+  .card:hover { border-color: rgba(212,170,53,0.3); }
+
+  .card-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.6;
+  }
+
+  /* ============================================================
+     STAT BARS
+  ============================================================ */
+  .stat-row {
+    margin-bottom: 16px;
+  }
+  .stat-row:last-child { margin-bottom: 0; }
+
+  .stat-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 7px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .stat-label .val { color: var(--parchment); font-weight: bold; }
+
+  .bar-track {
+    height: var(--bar-h);
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    position: relative;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: rgba(255,255,255,0.35);
+    border-radius: 99px;
+    filter: blur(4px);
+  }
+
+  .bar-hunger  { background: linear-gradient(90deg, #7b1818, #c8102e, #ff4757); }
+  .bar-energy  { background: linear-gradient(90deg, #1a1a6b, #3742fa, #70a1ff); }
+  .bar-happy   { background: linear-gradient(90deg, #5a3900, #d4aa35, #ffd700); }
+
+  /* warning pulse when very low */
+  .bar-fill.low { animation: warnPulse 1.4s ease-in-out infinite; }
+  @keyframes warnPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+  }
+
+  /* ============================================================
+     TRICKS
+  ============================================================ */
+  .trick-list { list-style: none; }
+  .trick-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.88rem;
+    color: var(--parchment);
+  }
+  .trick-item:last-child { border-bottom: none; }
+  .trick-item::before { content: '✦'; color: var(--gold); font-size: 0.7rem; }
+
+  .empty-state {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-style: italic;
+    padding: 10px 0;
+  }
+
+  /* ============================================================
+     FRIENDS
+  ============================================================ */
+  .friend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .friend-item:last-child { border-bottom: none; }
+
+  .friend-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    flex-shrink: 0;
+  }
+
+  .friend-info { flex: 1; }
+  .friend-name { font-size: 0.88rem; }
+  .friend-bond-track {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+  .friend-bond-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--violet), var(--gold));
+    border-radius: 99px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .friend-bond-val {
+    font-size: 0.72rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ============================================================
+     ACTIVITY LOG
+  ============================================================ */
+  .log-list { list-style: none; }
+  .log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.82rem;
+    align-items: start;
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-time  { color: var(--muted); font-size: 0.72rem; padding-top: 1px; }
+  .log-event { color: var(--parchment); line-height: 1.5; }
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  /* ============================================================
+     MOOD COLORS
+  ============================================================ */
+  .mood-ecstatic  { color: #ffd700; border-color: #ffd700; }
+  .mood-happy     { color: #48bb78; border-color: #48bb78; }
+  .mood-content   { color: #68d391; border-color: #68d391; }
+  .mood-meh       { color: #a0aec0; border-color: #a0aec0; }
+  .mood-sad       { color: #63b3ed; border-color: #63b3ed; }
+  .mood-angry     { color: #fc8181; border-color: #fc8181; }
+  .mood-exhausted { color: #b794f4; border-color: #b794f4; }
+
+  /* ============================================================
+     SCROLLBAR
+  ============================================================ */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212,170,53,0.3); border-radius: 3px; }
+
+  /* ============================================================
+     DRAGON MOOD STATE ANIMATIONS
+  ============================================================ */
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+    30%       { transform: translateY(-22px) scale(1.1) rotate(3deg); }
+    60%       { transform: translateY(-8px) scale(1.05) rotate(-1deg); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    20%       { transform: translateX(-5px) rotate(-5deg); }
+    40%       { transform: translateX(5px) rotate(5deg); }
+    60%       { transform: translateX(-3px) rotate(-3deg); }
+    80%       { transform: translateX(3px) rotate(3deg); }
+  }
+  @keyframes droop {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(8px) rotate(-4deg); }
+  }
+  @keyframes sleep {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50%       { transform: translateY(6px) rotate(5deg); }
+  }
+  @keyframes sparkleFloat {
+    0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translate(var(--tx, 20px), var(--ty, -40px)) scale(1.3); opacity: 0; }
+  }
+  @keyframes heartPop {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+    50%       { transform: translateX(-50%) scale(1.45); opacity: 1; }
+  }
+  @keyframes zzzFloat {
+    0%   { transform: translate(0, 0) rotate(5deg); opacity: 0; }
+    20%  { opacity: 0.9; }
+    100% { transform: translate(12px, -32px) rotate(18deg); opacity: 0; }
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .state-ecstatic {
+    animation: bounce 0.65s ease-in-out infinite;
+    filter: brightness(1.4) saturate(1.6) drop-shadow(0 0 10px #ffd700);
+  }
+  .state-happy {
+    animation: float 2.5s ease-in-out infinite;
+    filter: brightness(1.15) drop-shadow(0 0 6px #48bb78);
+  }
+  .state-content { animation: float 4s ease-in-out infinite; }
+  .state-meh     { animation: none; }
+  .state-angry {
+    animation: shake 0.22s linear infinite;
+    filter: brightness(1.3) saturate(2) drop-shadow(0 0 8px #c8102e);
+  }
+  .state-sad {
+    animation: droop 3.5s ease-in-out infinite;
+    filter: brightness(0.55) saturate(0.3) hue-rotate(200deg);
+  }
+  .state-exhausted {
+    animation: sleep 3.5s ease-in-out infinite;
+    filter: brightness(0.45) saturate(0.2);
+  }
+
+  /* Overlay effects */
+  .effect { position: absolute; pointer-events: none; z-index: 10; }
+
+  .sparkle {
+    font-size: 0.8rem;
+    animation: sparkleFloat var(--dur, 2s) ease-out var(--delay, 0s) infinite;
+  }
+  .zzz-wrap {
+    top: 6px; right: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+  }
+  .zzz-wrap .z {
+    color: #b794f4;
+    font-weight: bold;
+    font-family: 'Georgia', serif;
+    opacity: 0;
+    animation: zzzFloat var(--dur, 2.2s) ease-out var(--delay, 0s) infinite;
+  }
+  .heart-badge {
+    top: -4px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    animation: heartPop 1.6s ease-in-out infinite;
+  }
+
+  /* Live indicator */
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #48bb78;
+    margin-right: 6px;
+    animation: livePulse 2s ease-in-out infinite;
+    vertical-align: middle;
+  }
+
+  /* ============================================================
+     LOADING
+  ============================================================ */
+  #loading {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: var(--bg);
+  }
+  #loading .flame {
+    font-size: 3rem;
+    animation: flameLoad 0.6s ease-in-out infinite alternate;
+  }
+  @keyframes flameLoad {
+    from { transform: scale(1) rotate(-5deg); }
+    to   { transform: scale(1.15) rotate(5deg); }
+  }
+  #loading p {
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="loading">
+  <div class="flame">🔥</div>
+  <p>Awakening the sanctum…</p>
+</div>
+
+<div id="app" style="display:none">
+
+  <header class="sanctum-title">
+    <h1>Dragon Sanctum</h1>
+    <div class="rune-divider">
+      <span></span><em>⚔ ✦ ⚔</em><span></span>
+    </div>
+    <p class="subtitle">Fourth Wing · Basgiath War College</p>
+  </header>
+
+  <div class="pet-tabs" id="petTabs"></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="dragon-stage">
+      <div class="pixel-dragon" id="pixelDragon"></div>
+    </div>
+    <div class="mood-badge" id="moodBadge"></div>
+  </div>
+
+  <!-- IDENTITY -->
+  <div class="identity">
+    <div class="pet-name" id="petName"></div>
+    <div class="meta" id="petMeta"></div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- Stats -->
+    <div class="card">
+      <div class="card-title">Vitals</div>
+      <div class="stat-row">
+        <div class="stat-label">
+          <span>🩸 Hunger</span>
+          <span class="val" id="hungerVal"></span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bar-hunger" id="hungerBar"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">
+          <span>⚡ Energy</span>
+          <span class="val" id="energyVal"></span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bar-energy" id="energyBar"></div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-label">
+          <span>✨ Happiness</span>
+          <span class="val" id="happyVal"></span>
+        </div>
+        <div class="bar-track"><div class="bar-fill bar-happy" id="happyBar"></div></div>
+      </div>
+    </div>
+
+    <!-- Tricks -->
+    <div class="card">
+      <div class="card-title">Mastered Arts</div>
+      <ul class="trick-list" id="trickList"></ul>
+    </div>
+
+    <!-- Friends -->
+    <div class="card">
+      <div class="card-title">Wing Bonds</div>
+      <div id="friendList"></div>
+    </div>
+
+    <!-- Activity Log -->
+    <div class="card full">
+      <div class="card-title">Chronicle</div>
+      <ul class="log-list" id="activityLog"></ul>
+    </div>
+
+  </div>
+
+  <div class="footer"><span class="live-dot"></span>Live · syncs every 8s · All dragons bond or burn</div>
+</div>
+
+<script>
+/* ============================================================
+   BACKGROUND — ember particles
+============================================================ */
+(function initCanvas() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles;
+
+  const COLORS = ['#c8102e','#ff6b1a','#d4aa35','#7c3aed','#ff4757'];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function makeParticle() {
+    return {
+      x: Math.random() * W,
+      y: H + 10,
+      r: Math.random() * 1.5 + 0.4,
+      speed: Math.random() * 0.6 + 0.2,
+      drift: (Math.random() - 0.5) * 0.4,
+      alpha: Math.random() * 0.5 + 0.2,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      life: 0,
+      maxLife: Math.random() * 300 + 200,
+    };
+  }
+
+  function init() {
+    resize();
+    particles = Array.from({ length: 80 }, () => {
+      const p = makeParticle();
+      p.y = Math.random() * H; // scatter on load
+      p.life = Math.random() * p.maxLife;
+      return p;
+    });
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+
+    // subtle vignette
+    const grad = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.85);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(1, 'rgba(0,0,0,0.5)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    particles.forEach((p, i) => {
+      p.life++;
+      p.y   -= p.speed;
+      p.x   += p.drift;
+      const fade = Math.min(1, Math.min(p.life / 40, (p.maxLife - p.life) / 40));
+      ctx.save();
+      ctx.globalAlpha = p.alpha * fade;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = p.r * 4;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      if (p.life >= p.maxLife) particles[i] = makeParticle();
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  tick();
+})();
+
+/* ============================================================
+   PIXEL DRAGON BUILDER
+  Each species gets its own pixel palette & shape.
+  Dragon sprite = 14x14 grid rendered as 8px CSS pixels via inline divs.
+============================================================ */
+const SPRITES = {
+  dragon: {
+    palette: { r: '#c8102e', o: '#ff6b1a', g: '#d4aa35', d: '#7a1a1a', e: '#ff4757', _: null },
+    // 14 cols x 14 rows  (r=red, o=orange, g=gold, d=dark, e=ember, _=transparent)
+    map: [
+      '_____rr__rr____',
+      '____rrrrrrrr___',
+      '____rogrorgg___',
+      '___rrrrrrrrrd__',
+      '__rrroooooorddd',
+      '_rrorooooorrdd_',
+      'rrooroooooord__',
+      'rroooooooood___',
+      '_rroooooord____',
+      '__rroogord_____',
+      '___rrrgrd______',
+      '____rrrr_______',
+      '___rrr_rrr_____',
+      '__rr_____rr____',
+    ],
+    size: 7,
+  },
+  bunny: {
+    palette: { w: '#e8dcc8', p: '#f4a0c0', b: '#c9b99a', d: '#a08060', _: null },
+    map: [
+      '_ww____ww______',
+      'www____www_____',
+      'wwwwwwwwww_____',
+      'wpwwwwwwpw_____',
+      'wwwwwwwwww_____',
+      '_wwwwwwwww_____',
+      '__wwwwwww______',
+      '__wwwwwww______',
+      '__wwwwwww______',
+      '__wwwwwww______',
+      '__wwwwwww______',
+      '__ww___ww______',
+    ],
+    size: 7,
+  },
+};
+
+function buildPixelArt(species) {
+  const def   = SPRITES[species] || SPRITES.dragon;
+  const stage = document.getElementById('pixelDragon');
+  stage.innerHTML = '';
+  const s = def.size;
+  stage.style.width  = (def.map[0].length * s) + 'px';
+  stage.style.height = (def.map.length    * s) + 'px';
+
+  def.map.forEach((row, y) => {
+    [...row].forEach((ch, x) => {
+      const color = def.palette[ch];
+      if (!color) return;
+      const px = document.createElement('div');
+      px.className = 'px';
+      px.style.cssText = `
+        left:${x*s}px; top:${y*s}px;
+        width:${s}px; height:${s}px;
+        background:${color};
+        box-shadow: 0 0 ${s*1.5}px ${color}55;
+      `;
+      stage.appendChild(px);
+    });
+  });
+}
+
+/* ============================================================
+   MOOD EFFECTS — animations & overlays per state
+============================================================ */
+const STAGE_GLOWS = {
+  'state-ecstatic': 'rgba(255,215,0,0.45)',
+  'state-happy':    'rgba(72,187,120,0.32)',
+  'state-content':  'rgba(100,200,140,0.22)',
+  'state-meh':      'rgba(200,60,20,0.18)',
+  'state-angry':    'rgba(220,16,46,0.5)',
+  'state-sad':      'rgba(100,149,237,0.28)',
+  'state-exhausted':'rgba(180,120,255,0.2)',
+};
+
+const MOOD_TO_STATE = {
+  ecstatic: 'state-ecstatic', happy:    'state-happy',
+  content:  'state-content',  meh:      'state-meh',
+  sad:      'state-sad',      miserable:'state-sad',
+  angry:    'state-angry',    grumpy:   'state-angry',
+};
+
+function applyMoodEffects(pet) {
+  const dragon = document.getElementById('pixelDragon');
+  const stage  = dragon.parentElement;
+
+  // clear old overlays
+  stage.querySelectorAll('.effect').forEach(e => e.remove());
+
+  const isExhausted = (pet.energy ?? 100) <= 5;
+  const isMaxHappy  = (pet.happiness ?? 0) >= 100;
+  const mood        = (pet.mood ?? 'meh').toLowerCase();
+
+  const stateClass  = isExhausted ? 'state-exhausted' : (MOOD_TO_STATE[mood] || 'state-meh');
+  dragon.className  = 'pixel-dragon ' + stateClass;
+  stage.style.setProperty('--stage-glow', STAGE_GLOWS[stateClass] || 'rgba(200,60,20,0.18)');
+
+  // zzz overlay when exhausted
+  if (isExhausted) {
+    const wrap = document.createElement('div');
+    wrap.className = 'effect zzz-wrap';
+    [{ t:'z', s:'0.6rem', dur:'2.2s', delay:'0s'   },
+     { t:'z', s:'0.8rem', dur:'2.2s', delay:'0.7s' },
+     { t:'Z', s:'1.0rem', dur:'2.2s', delay:'1.4s' }].forEach(({ t, s, dur, delay }) => {
+      const z = document.createElement('span');
+      z.className = 'z';
+      z.textContent = t;
+      z.style.cssText = `font-size:${s}; --dur:${dur}; --delay:${delay};`;
+      wrap.appendChild(z);
+    });
+    stage.appendChild(wrap);
+  }
+
+  // sparkles when ecstatic
+  if (mood === 'ecstatic') {
+    const SPARKS = ['✨','⭐','💫','🌟','✦'];
+    [{ l:'15%', t:'20%', tx:'-25px', ty:'-35px' },
+     { l:'75%', t:'25%', tx: '20px', ty:'-40px' },
+     { l:'50%', t:'10%', tx:  '5px', ty:'-45px' },
+     { l:'10%', t:'55%', tx:'-30px', ty:'-20px' },
+     { l:'80%', t:'60%', tx: '25px', ty:'-25px' },
+     { l:'42%', t:'72%', tx: '-5px', ty:'-38px' }].forEach((pos, i) => {
+      const s = document.createElement('div');
+      s.className = 'effect sparkle';
+      s.textContent = SPARKS[i % SPARKS.length];
+      const dur   = (1.4 + Math.random() * 1.1).toFixed(2) + 's';
+      const delay = (Math.random() * 1.5).toFixed(2) + 's';
+      s.style.cssText = `left:${pos.l}; top:${pos.t}; --tx:${pos.tx}; --ty:${pos.ty}; --dur:${dur}; --delay:${delay};`;
+      stage.appendChild(s);
+    });
+  }
+
+  // heart when max happiness
+  if (isMaxHappy) {
+    const h = document.createElement('div');
+    h.className = 'effect heart-badge';
+    h.textContent = '💖';
+    stage.appendChild(h);
+  }
+}
+
+/* ============================================================
+   MOOD HELPERS
+============================================================ */
+const MOOD_EMOJI = {
+  ecstatic: '🔥', happy: '😄', content: '😌',
+  meh: '😶', sad: '😞', angry: '😤', exhausted: '😴',
+};
+
+function moodClass(mood) { return 'mood-' + (mood || 'meh').toLowerCase().replace(/\s+/g, '-'); }
+function moodEmoji(mood) { return MOOD_EMOJI[mood?.toLowerCase()] || '🐉'; }
+function speciesEmoji(sp) {
+  return { dragon: '🐉', bunny: '🐰', cat: '🐱', dog: '🐶', fox: '🦊' }[sp] || '🦎';
+}
+
+/* ============================================================
+   RENDER PET
+============================================================ */
+function renderPet(pet) {
+  buildPixelArt(pet.species);
+  applyMoodEffects(pet);
+
+  // mood badge
+  const mb = document.getElementById('moodBadge');
+  mb.textContent = moodEmoji(pet.mood) + ' ' + (pet.mood || 'unknown');
+  mb.className   = 'mood-badge ' + moodClass(pet.mood);
+
+  // identity
+  document.getElementById('petName').textContent = pet.name;
+  const meta = document.getElementById('petMeta');
+  meta.innerHTML = `
+    <span class="badge species">${speciesEmoji(pet.species)} ${pet.species}</span>
+    <span class="badge personality">⚔ ${pet.personality}</span>
+  `;
+
+  // bars
+  function setBar(id, valId, val) {
+    const bar = document.getElementById(id);
+    const num = document.getElementById(valId);
+    // Animate in
+    setTimeout(() => { bar.style.width = val + '%'; }, 60);
+    num.textContent = val + ' / 100';
+    bar.classList.toggle('low', val < 20);
+  }
+  setBar('hungerBar', 'hungerVal', pet.hunger   ?? 0);
+  setBar('energyBar', 'energyVal', pet.energy   ?? 0);
+  setBar('happyBar',  'happyVal',  pet.happiness ?? 0);
+
+  // tricks
+  const tl = document.getElementById('trickList');
+  if (!pet.tricks?.length) {
+    tl.innerHTML = '<li class="empty-state">No tricks mastered yet. Keep training, rider.</li>';
+  } else {
+    tl.innerHTML = pet.tricks.map(t =>
+      `<li class="trick-item">${t}</li>`
+    ).join('');
+  }
+
+  // friends
+  const fl = document.getElementById('friendList');
+  if (!pet.friends?.length) {
+    fl.innerHTML = '<p class="empty-state">No bonds forged yet. Seek out allies.</p>';
+  } else {
+    fl.innerHTML = pet.friends.map(f => `
+      <div class="friend-item">
+        <div class="friend-avatar">${speciesEmoji(f.species || 'dragon')}</div>
+        <div class="friend-info">
+          <div class="friend-name">${f.name}</div>
+          <div class="friend-bond-track">
+            <div class="friend-bond-fill" style="width:0%" data-bond="${f.bond}"></div>
+          </div>
+        </div>
+        <div class="friend-bond-val">Bond ${f.bond}</div>
+      </div>
+    `).join('');
+    // animate bond bars
+    setTimeout(() => {
+      document.querySelectorAll('.friend-bond-fill').forEach(el => {
+        el.style.transition = 'width 1s cubic-bezier(0.4,0,0.2,1)';
+        el.style.width = el.dataset.bond + '%';
+      });
+    }, 120);
+  }
+
+  // activity
+  const al = document.getElementById('activityLog');
+  if (!pet.activity_log?.length) {
+    al.innerHTML = '<li class="log-item"><span class="log-time">—</span><span class="log-event">No chronicle entries yet.</span></li>';
+  } else {
+    al.innerHTML = pet.activity_log.map(entry => `
+      <li class="log-item">
+        <span class="log-time">${entry.time}</span>
+        <span class="log-event">${entry.event}</span>
+      </li>
+    `).join('');
+  }
+}
+
+/* ============================================================
+   TABS
+============================================================ */
+function buildTabs(pets, featured, onSelect) {
+  const tabsEl = document.getElementById('petTabs');
+  tabsEl.innerHTML = '';
+  pets.forEach(pet => {
+    const btn = document.createElement('button');
+    btn.className = 'pet-tab' + (pet.name === featured ? ' active' : '');
+    btn.textContent = speciesEmoji(pet.species) + ' ' + pet.name;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pet-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      onSelect(pet);
+    });
+    tabsEl.appendChild(btn);
+  });
+}
+
+/* ============================================================
+   BOOT + LIVE POLLING
+============================================================ */
+let currentPetName = null;
+let initialized    = false;
+
+function loadData() {
+  // cache-bust so the browser always fetches fresh JSON
+  return fetch('pet_state.json?t=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      const pets     = data.pets || [];
+      const featured = data.featured || pets[0]?.name;
+
+      if (!initialized) {
+        // First load — build tabs and show app
+        initialized    = true;
+        currentPetName = featured;
+
+        buildTabs(pets, featured, pet => {
+          currentPetName = pet.name;
+          // find fresh pet from latest data when tab clicked
+          renderPet(pet);
+        });
+
+        const current = pets.find(p => p.name === currentPetName) || pets[0];
+        renderPet(current);
+
+        document.getElementById('loading').style.display = 'none';
+        const app = document.getElementById('app');
+        app.style.display = 'block';
+        app.style.opacity = '0';
+        app.style.transition = 'opacity 0.8s ease';
+        setTimeout(() => { app.style.opacity = '1'; }, 20);
+      } else {
+        // Poll update — re-render active pet with fresh data, refresh tab data refs
+        buildTabs(pets, currentPetName, pet => {
+          currentPetName = pet.name;
+          renderPet(pet);
+        });
+        const current = pets.find(p => p.name === currentPetName) || pets[0];
+        if (current) renderPet(current);
+      }
+
+      const dot = document.querySelector('.live-dot');
+      if (dot) dot.style.background = '#48bb78';
+    })
+    .catch(err => {
+      if (!initialized) {
+        document.getElementById('loading').innerHTML = `
+          <div style="font-size:2rem">⚠️</div>
+          <p style="color:#fc8181;letter-spacing:.15em">Failed to load pet_state.json</p>
+          <p style="color:var(--muted);font-size:.75rem;margin-top:8px">${err.message}</p>
+        `;
+      }
+      const dot = document.querySelector('.live-dot');
+      if (dot) dot.style.background = '#fc8181';
+    });
+}
+
+loadData();
+setInterval(loadData, 8000);
+</script>
+</body>
+</html>

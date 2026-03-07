@@ -1,0 +1,61 @@
+{
+  "featured": "Ember",
+  "pets": [
+    {
+      "name": "Ember",
+      "species": "dragon",
+      "personality": "wild",
+      "mood": "meh",
+      "hunger": 29,
+      "energy": 0,
+      "happiness": 100,
+      "tricks": [],
+      "friends": [
+        { "name": "Pebble", "species": "bunny", "bond": 85 }
+      ],
+      "activity_log": [
+        { "time": "just now",  "event": "Ember was fed. Hunger eased to 29. She breathed a tiny flame of satisfaction." },
+        { "time": "5 min ago", "event": "Played with Pebble. Bond strengthened to 85. Happiness maxed." },
+        { "time": "1 hr ago",  "event": "Ember collapsed after an exhausting flight. Energy fully depleted." },
+        { "time": "2 hrs ago", "event": "Ember soared high above the Cliffs of Aretia." },
+        { "time": "4 hrs ago", "event": "Fed Ember. Hunger eased from critical." }
+      ]
+    },
+    {
+      "name": "Pebble",
+      "species": "bunny",
+      "personality": "shy",
+      "mood": "meh",
+      "hunger": 54,
+      "energy": 0,
+      "happiness": 100,
+      "tricks": [],
+      "friends": [
+        { "name": "Ember", "species": "dragon", "bond": 85 }
+      ],
+      "activity_log": [
+        { "time": "just now",  "event": "Pebble played hard, then crashed immediately after. Energy depleted." },
+        { "time": "5 min ago", "event": "Pebble was fed. Hunger dropped to 54." },
+        { "time": "30 min ago","event": "Pebble twitched nervously under a storm cloud." },
+        { "time": "2 hrs ago", "event": "Played with Ember. Bond strengthened to 85." }
+      ]
+    },
+    {
+      "name": "Baby_EmbPeb",
+      "species": "dragon",
+      "personality": "wild",
+      "mood": "ecstatic",
+      "hunger": 12,
+      "energy": 58,
+      "happiness": 95,
+      "tricks": [],
+      "friends": [],
+      "activity_log": [
+        { "time": "just now",  "event": "Baby_EmbPeb went absolutely feral during play. Something got knocked over." },
+        { "time": "10 min ago","event": "Baby_EmbPeb was fed. Thoroughly stuffed — hunger 12." },
+        { "time": "1 hr ago",  "event": "Baby_EmbPeb breathed a tiny puff of smoke. Very proud of herself." },
+        { "time": "3 hrs ago", "event": "Took a long nap curled in a nest of warm embers." }
+      ]
+    }
+  ]
+}
