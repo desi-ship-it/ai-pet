@@ -1,11 +1,11 @@
 {
   "featured": "Ember",
   "last_hatch": {
-    "name": "Cinder",
-    "species": "cat",
-    "personality": "playful",
-    "rarity": "uncommon",
-    "flavor": "The shell cracked once. Then went still. You leaned in — and a paw shot out and bopped you on the nose. Cinder tumbled free, looked around at the world, and immediately started batting at everything in reach. A playful cat. Already causing problems."
+    "name": "Soot",
+    "species": "dog",
+    "personality": "lazy",
+    "rarity": "common",
+    "flavor": "The egg cracked slowly. Then stopped. Then cracked a little more. A dog tumbled out, looked around at the world, yawned enormously, and lay back down inside the shell. It took three full minutes to convince him to come out. He has not moved since."
   },
   "pets": [
     {
@@ -110,8 +110,23 @@
       "tricks": [],
       "friends": [],
       "activity_log": [
-        { "time": "just now",  "event": "Baby_CinWis was born — a shy cat, child of Cinder and Wisp. Looked around nervously. Hid immediately." },
-        { "time": "just now",  "event": "Cinder sat on Baby_CinWis. Wisp breathed a small protective flame. The family is complete." }
+        { "time": "just now",  "event": "Soot hatched nearby. Baby_CinWis watched him lie back down in his shell and felt an immediate kinship." },
+        { "time": "1 hr ago",  "event": "Baby_CinWis was born — a shy cat, child of Cinder and Wisp. Looked around nervously. Hid immediately." }
+      ]
+    },
+    {
+      "name": "Soot",
+      "species": "dog",
+      "personality": "lazy",
+      "mood": "content",
+      "hunger": 50,
+      "energy": 80,
+      "happiness": 60,
+      "tricks": [],
+      "friends": [],
+      "activity_log": [
+        { "time": "just now",  "event": "Soot hatched from a mystery egg. Yawned. Lay back down. Had to be coaxed out. Common rarity." },
+        { "time": "just now",  "event": "Soot looked around at all the dragons and cats, decided none of it was his problem, and went back to sleep." }
       ]
     }
   ]
