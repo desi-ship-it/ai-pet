@@ -65,31 +65,38 @@
       "name": "Wisp",
       "species": "dragon",
       "personality": "shy",
-      "mood": "content",
-      "hunger": 50,
-      "energy": 80,
-      "happiness": 60,
+      "mood": "meh",
+      "hunger": 74,
+      "energy": 35,
+      "happiness": 90,
       "tricks": [],
-      "friends": [],
+      "friends": [
+        { "name": "Cinder", "species": "cat", "bond": 38 }
+      ],
       "activity_log": [
-        { "time": "just now",  "event": "Wisp watched Cinder hatch from across the room, too nervous to approach." },
-        { "time": "1 hr ago",  "event": "Wisp hatched from a mystery egg. Immediately hid behind the nearest boot." },
-        { "time": "2 hrs ago", "event": "Wisp looked around with wide, frightened eyes. The world is very large." }
+        { "time": "just now",  "event": "Cinder chased Wisp through the whole forest. Wisp loved every second of it. Bond: 38." },
+        { "time": "30 min ago", "event": "Played with Cinder until they both collapsed in a heap." },
+        { "time": "1 hr ago",  "event": "Cinder approached. Wisp froze — then cautiously sniffed back. Something stirred." },
+        { "time": "2 hrs ago", "event": "Wisp watched Cinder hatch from across the room, too nervous to approach." }
       ]
     },
     {
       "name": "Cinder",
       "species": "cat",
       "personality": "playful",
-      "mood": "happy",
-      "hunger": 40,
-      "energy": 90,
-      "happiness": 75,
+      "mood": "meh",
+      "hunger": 74,
+      "energy": 35,
+      "happiness": 100,
       "tricks": [],
-      "friends": [],
+      "friends": [
+        { "name": "Wisp", "species": "dragon", "bond": 38 }
+      ],
       "activity_log": [
-        { "time": "just now",  "event": "Cinder hatched from a mystery egg. Immediately bopped you on the nose. Uncommon rarity." },
-        { "time": "just now",  "event": "Cinder looked around the world and started batting at everything in sight." }
+        { "time": "just now",  "event": "Cinder chased Wisp for the third time today. Wisp keeps running. Cinder keeps following. Bond: 38." },
+        { "time": "30 min ago", "event": "Played with Wisp until they both collapsed. Cinder purred." },
+        { "time": "1 hr ago",  "event": "Cinder spotted the shy little dragon and immediately decided to befriend it. Whether Wisp liked it or not." },
+        { "time": "2 hrs ago", "event": "Cinder hatched. Looked around. Saw Wisp. Made a decision." }
       ]
     }
   ]
