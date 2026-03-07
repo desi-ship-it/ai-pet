@@ -1,6 +1,12 @@
 {
   "featured": "Ember",
-  "last_hatch": null,
+  "last_hatch": {
+    "name": "Wisp",
+    "species": "dragon",
+    "personality": "shy",
+    "rarity": "rare",
+    "flavor": "The egg trembled for a long moment... then went perfectly still. Just as you turned away — it shattered. A tiny dragon tumbled out and immediately hid behind your boot, peering up with enormous, frightened eyes. A shy dragon. They almost never hatch."
+  },
   "pets": [
     {
       "name": "Ember",
@@ -15,11 +21,10 @@
         { "name": "Pebble", "species": "bunny", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Ember was fed. She breathed a tiny flame of satisfaction." },
-        { "time": "5 min ago", "event": "Played with Pebble. Bond strengthened to 85. Happiness maxed." },
-        { "time": "1 hr ago",  "event": "Ember collapsed after an exhausting flight. Energy fully depleted." },
-        { "time": "2 hrs ago", "event": "Ember soared high above the Cliffs of Aretia." },
-        { "time": "4 hrs ago", "event": "Fed Ember. Hunger eased from critical." }
+        { "time": "just now",  "event": "A new dragon was born from a mystery egg. Ember sniffed the air suspiciously." },
+        { "time": "1 hr ago",  "event": "Ember was fed. She breathed a tiny flame of satisfaction." },
+        { "time": "2 hrs ago", "event": "Played with Pebble. Bond strengthened to 85." },
+        { "time": "3 hrs ago", "event": "Ember collapsed after an exhausting flight. Energy fully depleted." }
       ]
     },
     {
@@ -35,10 +40,9 @@
         { "name": "Ember", "species": "dragon", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Pebble played hard, then crashed immediately after. Energy depleted." },
-        { "time": "5 min ago", "event": "Pebble was fed. Hunger dropped to 54." },
-        { "time": "30 min ago","event": "Pebble twitched nervously under a storm cloud." },
-        { "time": "2 hrs ago", "event": "Played with Ember. Bond strengthened to 85." }
+        { "time": "just now",  "event": "Pebble sensed the new hatchling and hid under a rock. Shy recognizes shy." },
+        { "time": "1 hr ago",  "event": "Pebble played hard, then crashed immediately after. Energy depleted." },
+        { "time": "2 hrs ago", "event": "Pebble was fed. Hunger dropped to 54." }
       ]
     },
     {
@@ -52,10 +56,24 @@
       "tricks": [],
       "friends": [],
       "activity_log": [
-        { "time": "just now",  "event": "Baby_EmbPeb went absolutely feral during play. Something got knocked over." },
-        { "time": "10 min ago","event": "Baby_EmbPeb was fed. Thoroughly stuffed — hunger 12." },
-        { "time": "1 hr ago",  "event": "Baby_EmbPeb breathed a tiny puff of smoke. Very proud of herself." },
-        { "time": "3 hrs ago", "event": "Took a long nap curled in a nest of warm embers." }
+        { "time": "just now",  "event": "Baby_EmbPeb spotted the new hatchling and immediately tried to wrestle it." },
+        { "time": "1 hr ago",  "event": "Baby_EmbPeb went absolutely feral during play. Something got knocked over." },
+        { "time": "2 hrs ago", "event": "Baby_EmbPeb was fed. Thoroughly stuffed." }
+      ]
+    },
+    {
+      "name": "Wisp",
+      "species": "dragon",
+      "personality": "shy",
+      "mood": "content",
+      "hunger": 50,
+      "energy": 80,
+      "happiness": 60,
+      "tricks": [],
+      "friends": [],
+      "activity_log": [
+        { "time": "just now",  "event": "Wisp hatched from a mystery egg. Immediately hid behind the nearest boot." },
+        { "time": "just now",  "event": "Wisp looked around with wide, frightened eyes. The world is very large." }
       ]
     }
   ]
