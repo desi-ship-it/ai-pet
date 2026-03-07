@@ -3,14 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <title>EMBER</title>
 <style>
   /* ============================================================
      TOKENS & RESET
   ============================================================ */
   :root {
-    --bg:        #05040d;
-    --surface:   rgba(12, 8, 28, 0.82);
+    --bg:        #000000;
+    --surface:   rgba(6, 2, 14, 0.90);
     --border:    rgba(180, 80, 30, 0.25);
     --glow:      rgba(200, 60, 20, 0.18);
     --crimson:   #c8102e;
@@ -26,7 +29,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: 'Outfit', sans-serif;
     background: var(--bg);
     color: var(--parchment);
     min-height: 100vh;
@@ -63,15 +66,23 @@
   }
 
   .sanctum-title h1 {
-    font-size: clamp(1.6rem, 5vw, 2.8rem);
-    letter-spacing: 0.18em;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(4rem, 14vw, 8rem);
+    font-weight: 900;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--ember) 50%, var(--crimson) 100%);
+    background: linear-gradient(160deg, #ffd700 0%, #ff9500 30%, #ff4400 65%, #cc0000 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 18px rgba(212,170,53,0.4));
-    line-height: 1.15;
+    filter: drop-shadow(0 0 40px rgba(255,100,0,0.85)) drop-shadow(0 0 90px rgba(200,16,46,0.55));
+    line-height: 1;
+    animation: titleFlicker 5s ease-in-out infinite;
+  }
+  @keyframes titleFlicker {
+    0%, 100% { filter: drop-shadow(0 0 40px rgba(255,100,0,0.85)) drop-shadow(0 0 90px rgba(200,16,46,0.55)); }
+    40%       { filter: drop-shadow(0 0 60px rgba(255,160,0,1.0)) drop-shadow(0 0 120px rgba(255,60,0,0.7)); }
+    70%       { filter: drop-shadow(0 0 35px rgba(255,80,0,0.75)) drop-shadow(0 0 70px rgba(200,16,46,0.45)); }
   }
 
   .sanctum-title .subtitle {
@@ -201,6 +212,7 @@
   }
 
   .identity .pet-name {
+    font-family: 'Cinzel', serif;
     font-size: clamp(1.8rem, 6vw, 3rem);
     background: linear-gradient(135deg, var(--parchment), var(--gold));
     -webkit-background-clip: text;
@@ -262,6 +274,7 @@
   .card:hover { border-color: rgba(212,170,53,0.3); }
 
   .card-title {
+    font-family: 'Cinzel', serif;
     font-size: 0.68rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -536,7 +549,7 @@
   .zzz-wrap .z {
     color: #b794f4;
     font-weight: bold;
-    font-family: 'Georgia', serif;
+    font-family: 'Outfit', sans-serif;
     opacity: 0;
     animation: zzzFloat var(--dur, 2.2s) ease-out var(--delay, 0s) infinite;
   }
@@ -588,7 +601,40 @@
   }
 
   /* ============================================================
-     EGG VAULT
+     FIXED EGG — persistent top-left corner element
+  ============================================================ */
+  #fixed-egg {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 50;
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: default;
+    filter: drop-shadow(0 0 10px rgba(212,170,53,0.6));
+    animation: eggBob 4s ease-in-out infinite;
+    transition: filter 0.3s;
+    user-select: none;
+  }
+  #fixed-egg:hover { filter: drop-shadow(0 0 22px rgba(255,210,60,0.95)); }
+
+  #egg-reveal-panel {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 51;
+    width: 232px;
+    background: rgba(4, 1, 10, 0.97);
+    border: 1px solid rgba(212,170,53,0.45);
+    border-radius: 14px;
+    padding: 20px 18px;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.95), 0 0 28px rgba(212,170,53,0.1);
+    backdrop-filter: blur(22px);
+    text-align: center;
+  }
+
+  /* ============================================================
+     EGG VAULT (card styles kept for last-hatch content)
   ============================================================ */
   .vault-inner {
     display: flex;
@@ -717,6 +763,12 @@
 
 <canvas id="bg-canvas"></canvas>
 
+<!-- Fixed egg — always visible top-left, reacts only on hatch -->
+<div id="fixed-egg" title="Ask Claude to hatch an egg">🥚</div>
+<div id="egg-reveal-panel" style="display:none">
+  <div id="egg-reveal-content"></div>
+</div>
+
 <div id="loading">
   <div class="flame">🔥</div>
   <p>Awakening the sanctum…</p>
@@ -789,16 +841,6 @@
       <div id="friendList"></div>
     </div>
 
-    <!-- Egg Vault -->
-    <div class="card" id="eggVaultCard">
-      <div class="card-title">The Vault</div>
-      <div class="vault-inner">
-        <div class="mystery-egg" id="mysteryEgg">🥚</div>
-        <p class="egg-cta">Ask Claude to hatch it</p>
-        <div id="lastHatchBanner" style="display:none"></div>
-      </div>
-    </div>
-
     <!-- Activity Log -->
     <div class="card full">
       <div class="card-title">Chronicle</div>
@@ -847,7 +889,12 @@
   const ctx = canvas.getContext('2d');
   let W, H, particles;
 
-  const COLORS = ['#c8102e','#ff6b1a','#d4aa35','#7c3aed','#ff4757'];
+  // Pure fire palette — no purple, all heat
+  const FIRE = [
+    '#ff1100','#ff2200','#ff4400','#ff5500','#ff6600',
+    '#ff8800','#ffaa00','#ffcc00','#ff3300','#dd0000',
+    '#ff7700','#ffbb00','#ff9900','#ee1100',
+  ];
 
   function resize() {
     W = canvas.width  = window.innerWidth;
@@ -855,24 +902,27 @@
   }
 
   function makeParticle() {
+    const big = Math.random() < 0.12; // 12% are large slow glow-orbs
     return {
-      x: Math.random() * W,
-      y: H + 10,
-      r: Math.random() * 1.5 + 0.4,
-      speed: Math.random() * 0.6 + 0.2,
-      drift: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.5 + 0.2,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      life: 0,
-      maxLife: Math.random() * 300 + 200,
+      x:       Math.random() * W,
+      y:       H + 10,
+      r:       big ? Math.random() * 3.5 + 2   : Math.random() * 1.8 + 0.3,
+      speed:   big ? Math.random() * 0.35 + 0.1 : Math.random() * 1.2 + 0.4,
+      drift:   (Math.random() - 0.5) * (big ? 0.25 : 1.0),
+      alpha:   big ? Math.random() * 0.25 + 0.08 : Math.random() * 0.8 + 0.25,
+      color:   FIRE[Math.floor(Math.random() * FIRE.length)],
+      life:    0,
+      maxLife: big ? Math.random() * 600 + 350 : Math.random() * 200 + 100,
+      sway:    Math.random() * 0.06 + 0.02,
+      big,
     };
   }
 
   function init() {
     resize();
-    particles = Array.from({ length: 80 }, () => {
+    particles = Array.from({ length: 240 }, () => {
       const p = makeParticle();
-      p.y = Math.random() * H; // scatter on load
+      p.y    = Math.random() * H; // pre-scatter on load
       p.life = Math.random() * p.maxLife;
       return p;
     });
@@ -881,23 +931,23 @@
   function tick() {
     ctx.clearRect(0, 0, W, H);
 
-    // subtle vignette
-    const grad = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.85);
+    // deep vignette from all edges
+    const grad = ctx.createRadialGradient(W/2, H/2, H*0.08, W/2, H/2, H*0.92);
     grad.addColorStop(0, 'transparent');
-    grad.addColorStop(1, 'rgba(0,0,0,0.5)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.75)');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
 
     particles.forEach((p, i) => {
       p.life++;
-      p.y   -= p.speed;
-      p.x   += p.drift;
-      const fade = Math.min(1, Math.min(p.life / 40, (p.maxLife - p.life) / 40));
+      p.y  -= p.speed;
+      p.x  += p.drift + Math.sin(p.life * p.sway) * 0.5; // organic sway
+      const fade = Math.min(1, Math.min(p.life / 50, (p.maxLife - p.life) / 60));
       ctx.save();
       ctx.globalAlpha = p.alpha * fade;
-      ctx.fillStyle = p.color;
+      ctx.fillStyle   = p.color;
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = p.r * 4;
+      ctx.shadowBlur  = p.big ? p.r * 12 : p.r * 7;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fill();
@@ -1236,38 +1286,40 @@ function buildTabs(pets, featured, onSelect) {
    EGG HATCH REVEAL
 ============================================================ */
 function renderLastHatch(data) {
-  const banner = document.getElementById('lastHatchBanner');
-  if (!banner || !data.last_hatch) return;
+  const fixedEgg    = document.getElementById('fixed-egg');
+  const revealPanel = document.getElementById('egg-reveal-panel');
+  const content     = document.getElementById('egg-reveal-content');
+  if (!fixedEgg || !revealPanel || !data.last_hatch) return;
+
   const h   = data.last_hatch;
   const key = [h.name, h.species, h.rarity].join('_');
   if (sessionStorage.getItem('ember_hatch_seen') === key) return;
 
   const rarityClass = 'rarity-' + (h.rarity || 'common');
-  banner.innerHTML = `
-    <div class="last-hatch-banner">
-      <div class="last-hatch-label">Recently Hatched</div>
-      <span class="last-hatch-emoji">${speciesEmoji(h.species)}</span>
-      <div class="last-hatch-name">${h.name}</div>
-      <span class="rarity-badge ${rarityClass}">${h.rarity || 'common'}</span>
-      <p class="last-hatch-flavor">${h.flavor || ''}</p>
-      <button class="dismiss-btn" id="hatchDismiss">Dismiss</button>
-    </div>
+  content.innerHTML = `
+    <div class="last-hatch-label">Hatched!</div>
+    <span class="last-hatch-emoji">${speciesEmoji(h.species)}</span>
+    <div class="last-hatch-name">${h.name}</div>
+    <span class="rarity-badge ${rarityClass}">${h.rarity || 'common'}</span>
+    <p class="last-hatch-flavor">${h.flavor || ''}</p>
+    <button class="dismiss-btn" id="hatchDismiss">Dismiss</button>
   `;
-  banner.style.display = 'block';
+  revealPanel.style.display = 'block';
 
   document.getElementById('hatchDismiss').addEventListener('click', () => {
     sessionStorage.setItem('ember_hatch_seen', key);
-    banner.style.display = 'none';
-    document.getElementById('mysteryEgg').textContent = '🥚';
+    revealPanel.style.display = 'none';
+    fixedEgg.textContent = '🥚';
+    fixedEgg.style.filter = 'drop-shadow(0 0 10px rgba(212,170,53,0.6))';
   });
 
-  // dramatic egg reveal sequence
-  const egg = document.getElementById('mysteryEgg');
-  if (egg) {
-    egg.textContent = '🥚';
-    setTimeout(() => { egg.textContent = '🐣'; }, 400);
-    setTimeout(() => { egg.textContent = speciesEmoji(h.species); }, 1800);
-  }
+  // dramatic sequence on the fixed corner egg
+  fixedEgg.style.filter = 'drop-shadow(0 0 30px rgba(255,220,50,0.95))';
+  setTimeout(() => { fixedEgg.textContent = '🐣'; }, 400);
+  setTimeout(() => {
+    fixedEgg.textContent = speciesEmoji(h.species);
+    fixedEgg.style.filter = 'drop-shadow(0 0 20px rgba(255,180,50,0.75))';
+  }, 1800);
 }
 
 /* ============================================================
