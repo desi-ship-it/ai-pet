@@ -12,8 +12,8 @@
       "name": "Ember",
       "species": "dragon",
       "personality": "wild",
-      "mood": "content",
-      "hunger": 0,
+      "mood": "meh",
+      "hunger": 40,
       "energy": 0,
       "happiness": 100,
       "tricks": [],
@@ -21,10 +21,10 @@
         { "name": "Pebble", "species": "bunny", "bond": 85 }
       ],
       "activity_log": [
-        { "time": "just now",  "event": "Cinder hatched nearby. Ember opened one eye, decided it wasn't a threat, and went back to digesting." },
-        { "time": "1 hr ago",  "event": "Ember was fed a big meal. Ate carefully, then licked the bowl clean. Mood lifted to content." },
-        { "time": "2 hrs ago", "event": "Ember refused to play. Too tired. Flopped over dramatically." },
-        { "time": "3 hrs ago", "event": "Ember collapsed after an exhausting flight. Energy fully depleted." }
+        { "time": "just now",  "event": "Ember had the zoomies times ten. You were a little scared. Then she crashed again." },
+        { "time": "30 min ago", "event": "Ember launched into chaos mode three times in a row. Wild dragons burn bright and fast." },
+        { "time": "1 hr ago",  "event": "Ember was petted back to life and immediately went feral. Classic." },
+        { "time": "2 hrs ago", "event": "Ember was fed a big meal. Ate carefully, licked the bowl clean. Mood: content." }
       ]
     },
     {
