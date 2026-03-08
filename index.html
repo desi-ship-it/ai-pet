@@ -481,96 +481,96 @@
   /* ============================================================
      MOOD ANIMATIONS
   ============================================================ */
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(-1deg); }
-    50%       { transform: translateY(-14px) rotate(1deg); }
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50%       { transform: translateY(-20px) rotate(1.5deg); }
   }
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
-    30%       { transform: translateY(-22px) scale(1.1) rotate(3deg); }
-    60%       { transform: translateY(-8px) scale(1.05) rotate(-1deg); }
+  @keyframes bounceFast {
+    0%, 100% { transform: translateY(0) scale(1); }
+    20%       { transform: translateY(-32px) scale(1.15) rotate(4deg); }
+    45%       { transform: translateY(-12px) scale(1.07) rotate(-2deg); }
+    70%       { transform: translateY(-26px) scale(1.12) rotate(3deg); }
   }
-  @keyframes shake {
+  @keyframes bounceGentle {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%       { transform: translateY(-18px) scale(1.06) rotate(1deg); }
+  }
+  @keyframes shakeSide {
     0%, 100% { transform: translateX(0) rotate(0deg); }
-    20%       { transform: translateX(-5px) rotate(-5deg); }
-    40%       { transform: translateX(5px) rotate(5deg); }
-    60%       { transform: translateX(-3px) rotate(-3deg); }
-    80%       { transform: translateX(3px) rotate(3deg); }
+    12%       { transform: translateX(-10px) rotate(-7deg); }
+    25%       { transform: translateX(10px) rotate(7deg); }
+    37%       { transform: translateX(-8px) rotate(-5deg); }
+    50%       { transform: translateX(8px) rotate(5deg); }
+    62%       { transform: translateX(-5px) rotate(-3deg); }
+    75%       { transform: translateX(5px) rotate(3deg); }
   }
-  @keyframes droop {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50%       { transform: translateY(8px) rotate(-4deg); }
+  @keyframes droopSway {
+    0%         { transform: translateY(0) rotate(0deg); }
+    25%        { transform: translateY(16px) rotate(-7deg); }
+    50%        { transform: translateY(12px) rotate(5deg); }
+    75%        { transform: translateY(18px) rotate(-5deg); }
+    100%       { transform: translateY(0) rotate(0deg); }
   }
-  @keyframes sleep {
-    0%, 100% { transform: translateY(0) rotate(-5deg); }
-    50%       { transform: translateY(6px) rotate(5deg); }
+  @keyframes tiltedBreath {
+    0%, 100% { transform: rotate(-15deg) scale(1) translateY(10px); }
+    50%       { transform: rotate(-13deg) scale(0.93) translateY(10px); }
   }
-  @keyframes sparkleFloat {
+  @keyframes emojiFloat {
     0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+    15%  { opacity: 1; }
+    100% { transform: translate(var(--tx, 0px), var(--ty, -55px)) scale(1.1); opacity: 0; }
+  }
+  @keyframes tearFall {
+    0%   { transform: translateY(0) scaleX(0.7); opacity: 0.9; }
+    100% { transform: translateY(var(--ty, 50px)) scaleX(0.6); opacity: 0; }
+  }
+  @keyframes angerPop {
+    0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+    25%  { transform: scale(1.5) rotate(15deg); opacity: 1; }
+    55%  { transform: scale(1.1) rotate(-5deg); opacity: 1; }
+    100% { transform: scale(0.4) rotate(10deg); opacity: 0; }
+  }
+  @keyframes burstOut {
+    0%   { transform: translate(0, 0) scale(0.2); opacity: 0; }
     20%  { opacity: 1; }
-    100% { transform: translate(var(--tx, 20px), var(--ty, -40px)) scale(1.3); opacity: 0; }
+    80%  { opacity: 0.9; }
+    100% { transform: translate(var(--bx, 0px), var(--by, -60px)) scale(1.4); opacity: 0; }
   }
-  @keyframes heartPop {
-    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
-    50%       { transform: translateX(-50%) scale(1.45); opacity: 1; }
-  }
-  @keyframes zzzFloat {
-    0%   { transform: translate(0, 0) rotate(5deg); opacity: 0; }
-    20%  { opacity: 0.9; }
-    100% { transform: translate(12px, -32px) rotate(18deg); opacity: 0; }
-  }
-  @keyframes livePulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 0.5; transform: scale(0.8); }
+  @keyframes goldenGlowPulse {
+    0%, 100% { filter: brightness(1.5) saturate(1.8) drop-shadow(0 0 14px #ffd700) drop-shadow(0 0 35px #ff8c00); }
+    50%       { filter: brightness(1.9) saturate(2.4) drop-shadow(0 0 28px #ffd700) drop-shadow(0 0 60px #ffaa00); }
   }
   @keyframes eggBob {
     0%, 100% { transform: translateY(0) rotate(-4deg); }
     50%       { transform: translateY(-14px) rotate(4deg); }
   }
-
-  .state-ecstatic {
-    animation: bounce 0.65s ease-in-out infinite;
-    filter: brightness(1.4) saturate(1.6) drop-shadow(0 0 10px #ffd700);
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.8); }
   }
-  .state-happy {
-    animation: float 2.5s ease-in-out infinite;
-    filter: brightness(1.15) drop-shadow(0 0 6px #48bb78);
-  }
-  .state-content   { animation: float 4s ease-in-out infinite; }
-  .state-meh       { animation: none; }
-  .state-angry {
-    animation: shake 0.22s linear infinite;
-    filter: brightness(1.3) saturate(2) drop-shadow(0 0 8px #c8102e);
-  }
-  .state-sad {
-    animation: droop 3.5s ease-in-out infinite;
-    filter: brightness(0.55) saturate(0.3) hue-rotate(200deg);
-  }
-  .state-exhausted {
-    animation: sleep 3.5s ease-in-out infinite;
-    filter: brightness(0.45) saturate(0.2);
+  @keyframes flameLoad {
+    from { transform: scale(1) rotate(-5deg); }
+    to   { transform: scale(1.15) rotate(5deg); }
   }
 
-  .effect { position: absolute; pointer-events: none; z-index: 10; }
-  .sparkle {
-    font-size: 0.8rem;
-    animation: sparkleFloat var(--dur, 2s) ease-out var(--delay, 0s) infinite;
-  }
-  .zzz-wrap {
-    top: 6px; right: 2px;
-    display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
-  }
-  .zzz-wrap .z {
-    color: #b794f4; font-weight: bold; font-family: 'Outfit', sans-serif;
-    opacity: 0;
-    animation: zzzFloat var(--dur, 2.2s) ease-out var(--delay, 0s) infinite;
-  }
-  .heart-badge {
-    top: -4px; left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.2rem;
-    animation: heartPop 1.6s ease-in-out infinite;
-  }
+  /* State base animations */
+  .state-ecstatic  { animation: bounceFast 0.48s ease-in-out infinite, goldenGlowPulse 0.7s ease-in-out infinite; }
+  .state-happy     { animation: bounceGentle 2s ease-in-out infinite;
+                     filter: brightness(1.25) drop-shadow(0 0 12px rgba(255,190,80,0.8)); }
+  .state-content   { animation: floatSlow 4s ease-in-out infinite; }
+  .state-meh       { animation: none; filter: saturate(0.3) brightness(0.75); }
+  .state-angry     { animation: shakeSide 0.17s linear infinite;
+                     filter: brightness(1.35) saturate(3) drop-shadow(0 0 18px rgba(220,0,0,1)) hue-rotate(-10deg); }
+  .state-sad       { animation: droopSway 4.5s ease-in-out infinite;
+                     filter: brightness(0.45) saturate(0.15) hue-rotate(210deg) drop-shadow(0 0 8px rgba(100,149,237,0.6)); }
+  .state-exhausted { animation: tiltedBreath 3.5s ease-in-out infinite;
+                     filter: brightness(0.28) saturate(0.1); }
+
+  .effect          { position: absolute; pointer-events: none; z-index: 10; }
+  .fx-emoji        { animation: emojiFloat var(--dur, 2s) ease-out forwards; }
+  .fx-tear         { animation: tearFall  var(--dur, 1.8s) ease-in forwards; }
+  .fx-anger        { animation: angerPop  var(--dur, 0.85s) ease-out forwards; }
+  .fx-burst        { animation: burstOut  var(--dur, 2.2s) ease-out forwards; }
 
   .live-dot {
     display: inline-block; width: 6px; height: 6px; border-radius: 50%;
@@ -1008,13 +1008,13 @@ function buildPixelArt(pet) {
    MOOD EFFECTS
 ============================================================ */
 const STAGE_GLOWS = {
-  'state-ecstatic': 'rgba(255,215,0,0.45)',
-  'state-happy':    'rgba(72,187,120,0.32)',
+  'state-ecstatic': 'rgba(255,215,0,0.55)',
+  'state-happy':    'rgba(255,180,60,0.35)',
   'state-content':  'rgba(100,200,140,0.22)',
-  'state-meh':      'rgba(200,60,20,0.18)',
-  'state-angry':    'rgba(220,16,46,0.5)',
-  'state-sad':      'rgba(100,149,237,0.28)',
-  'state-exhausted':'rgba(180,120,255,0.2)',
+  'state-meh':      'rgba(120,120,120,0.15)',
+  'state-angry':    'rgba(220,16,46,0.6)',
+  'state-sad':      'rgba(80,120,220,0.35)',
+  'state-exhausted':'rgba(100,80,160,0.2)',
 };
 
 const MOOD_TO_STATE = {
@@ -1024,7 +1024,7 @@ const MOOD_TO_STATE = {
   angry:    'state-angry',    grumpy:   'state-angry',
 };
 
-const NEUTRAL_STATES = ['state-meh', 'state-content', 'state-happy'];
+const NEUTRAL_STATES = ['state-content', 'state-meh'];
 
 function moodStateFor(pet) {
   const isExhausted = (pet.energy ?? 100) <= 5;
@@ -1032,59 +1032,143 @@ function moodStateFor(pet) {
   return isExhausted ? 'state-exhausted' : (MOOD_TO_STATE[mood] || 'state-meh');
 }
 
+/* ---- floating emoji spawner ---- */
+let moodSpawnInterval = null;
+
+function clearMoodEffects(stage) {
+  stage.querySelectorAll('.effect').forEach(e => e.remove());
+  if (moodSpawnInterval) { clearInterval(moodSpawnInterval); moodSpawnInterval = null; }
+}
+
+function spawnFx(stage, emoji, cls, opts = {}) {
+  const el  = document.createElement('div');
+  el.className = 'effect ' + cls;
+  el.textContent = emoji;
+  const x   = opts.x   ?? (5 + Math.random() * 90);
+  const y   = opts.y   ?? (10 + Math.random() * 70);
+  const sz  = opts.sz  ?? (0.8 + Math.random() * 0.7);
+  const dur = opts.dur ?? (1.2 + Math.random() * 1.4);
+  const tx  = opts.tx  ?? ((Math.random() - 0.5) * 50);
+  const ty  = opts.ty  ?? -(35 + Math.random() * 40);
+  el.style.cssText = `left:${x}%;top:${y}%;font-size:${sz}rem;--tx:${tx}px;--ty:${ty}px;--dur:${dur}s;`;
+  stage.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 0.15) * 1000);
+}
+
+function spawnTear(stage) {
+  const el = document.createElement('div');
+  el.className = 'effect fx-tear';
+  el.textContent = '💧';
+  const x   = 20 + Math.random() * 60;
+  const dur = 1.4 + Math.random() * 1.0;
+  const ty  = 40 + Math.random() * 35;
+  el.style.cssText = `left:${x}%;top:${10 + Math.random()*30}%;font-size:${0.7+Math.random()*0.5}rem;--ty:${ty}px;--dur:${dur}s;`;
+  stage.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 0.15) * 1000);
+}
+
+function spawnAnger(stage) {
+  const el = document.createElement('div');
+  el.className = 'effect fx-anger';
+  el.textContent = '💢';
+  const x   = 5 + Math.random() * 85;
+  const y   = 5 + Math.random() * 50;
+  const dur = 0.75 + Math.random() * 0.4;
+  el.style.cssText = `left:${x}%;top:${y}%;font-size:${0.9+Math.random()*0.7}rem;--dur:${dur}s;`;
+  stage.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 0.15) * 1000);
+}
+
+function startMoodSpawner(stage, stateClass) {
+  const ECSTATIC_POOL = ['✨','⭐','💫','🌟','✦','⚡'];
+  const intervals = {
+    'state-ecstatic':  280,
+    'state-happy':    2200,
+    'state-content':  5000,
+    'state-meh':      9000,
+    'state-angry':     550,
+    'state-sad':      1100,
+    'state-exhausted':1900,
+  };
+  const ms = intervals[stateClass];
+  if (!ms) return;
+
+  const spawn = () => {
+    if (stateClass === 'state-ecstatic') {
+      // dense sparkle shower — spawn 2–3 at once
+      const n = 2 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < n; i++) {
+        spawnFx(stage, ECSTATIC_POOL[Math.floor(Math.random()*ECSTATIC_POOL.length)], 'fx-emoji',
+          { dur: 0.9 + Math.random()*0.8, sz: 0.9 + Math.random()*0.8 });
+      }
+    } else if (stateClass === 'state-happy') {
+      spawnFx(stage, Math.random() < 0.6 ? '💕' : '💖', 'fx-emoji',
+        { y: 30 + Math.random()*40, dur: 2 + Math.random()*1.2 });
+    } else if (stateClass === 'state-content') {
+      spawnFx(stage, '😊', 'fx-emoji', { sz: 0.75, dur: 3 + Math.random()*1.5 });
+    } else if (stateClass === 'state-meh') {
+      spawnFx(stage, '😐', 'fx-emoji', { sz: 0.7, dur: 3.5, ty: -25 });
+    } else if (stateClass === 'state-angry') {
+      spawnAnger(stage);
+    } else if (stateClass === 'state-sad') {
+      spawnTear(stage);
+    } else if (stateClass === 'state-exhausted') {
+      const glyphs = ['z','z','Z'];
+      glyphs.forEach((g, i) => {
+        setTimeout(() => {
+          spawnFx(stage, g, 'fx-emoji', {
+            x: 60 + i * 8, y: 5 + i * 6,
+            sz: 0.6 + i * 0.2,
+            tx: 8 + i * 4, ty: -(20 + i * 8),
+            dur: 2.0 + i * 0.3,
+          });
+        }, i * 250);
+      });
+    }
+  };
+
+  spawn();
+  moodSpawnInterval = setInterval(spawn, ms);
+}
+
+function triggerActionBurst(stage, type) {
+  const emojis = type === 'feed'
+    ? ['🍖','✨','🍗','💛','⭐']
+    : ['🎾','💨','⚡','🌀','✨'];
+  const n = 8;
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const el  = document.createElement('div');
+      el.className = 'effect fx-burst';
+      el.textContent = emojis[i % emojis.length];
+      const angle = (i / n) * Math.PI * 2;
+      const dist  = 40 + Math.random() * 30;
+      const bx    = Math.round(Math.cos(angle) * dist);
+      const by    = Math.round(Math.sin(angle) * dist * 0.6 - 30);
+      const sz    = 0.9 + Math.random() * 0.7;
+      const dur   = 1.8 + Math.random() * 0.8;
+      el.style.cssText = `left:50%;top:50%;font-size:${sz}rem;transform:translate(-50%,-50%);--bx:${bx}px;--by:${by}px;--dur:${dur}s;`;
+      stage.appendChild(el);
+      setTimeout(() => el.remove(), (dur + 0.2) * 1000);
+    }, i * 60);
+  }
+}
+
 function applyMoodEffects(pet) {
   const dragon = document.getElementById('pixelDragon');
   const stage  = dragon.parentElement;
-  stage.querySelectorAll('.effect').forEach(e => e.remove());
+  clearMoodEffects(stage);
 
-  const isExhausted = (pet.energy ?? 100) <= 5;
-  const isMaxHappy  = (pet.happiness ?? 0) >= 100;
-  const mood        = (pet.mood ?? 'meh').toLowerCase();
-  const stateClass  = moodStateFor(pet);
+  const stateClass = moodStateFor(pet);
 
   dragon.className = 'pixel-dragon ' + stateClass;
   stage.style.setProperty('--stage-glow', STAGE_GLOWS[stateClass] || 'rgba(200,60,20,0.18)');
-  dragon.style.filter = NEUTRAL_STATES.includes(stateClass) ? (dragon.dataset.baseFilter || '') : '';
 
-  if (isExhausted) {
-    const wrap = document.createElement('div');
-    wrap.className = 'effect zzz-wrap';
-    [{ t:'z', s:'0.6rem', dur:'2.2s', delay:'0s'   },
-     { t:'z', s:'0.8rem', dur:'2.2s', delay:'0.7s' },
-     { t:'Z', s:'1.0rem', dur:'2.2s', delay:'1.4s' }].forEach(({ t, s, dur, delay }) => {
-      const z = document.createElement('span');
-      z.className = 'z';
-      z.textContent = t;
-      z.style.cssText = `font-size:${s}; --dur:${dur}; --delay:${delay};`;
-      wrap.appendChild(z);
-    });
-    stage.appendChild(wrap);
-  }
+  // Species glow only on truly neutral states (content, meh); other moods control their own filter via CSS
+  const applyGlow = NEUTRAL_STATES.includes(stateClass);
+  dragon.style.filter = applyGlow ? (dragon.dataset.baseFilter || '') : '';
 
-  if (mood === 'ecstatic') {
-    const SPARKS = ['✨','⭐','💫','🌟','✦'];
-    [{ l:'15%', t:'20%', tx:'-25px', ty:'-35px' },
-     { l:'75%', t:'25%', tx: '20px', ty:'-40px' },
-     { l:'50%', t:'10%', tx:  '5px', ty:'-45px' },
-     { l:'10%', t:'55%', tx:'-30px', ty:'-20px' },
-     { l:'80%', t:'60%', tx: '25px', ty:'-25px' },
-     { l:'42%', t:'72%', tx: '-5px', ty:'-38px' }].forEach((pos, i) => {
-      const s = document.createElement('div');
-      s.className = 'effect sparkle';
-      s.textContent = SPARKS[i % SPARKS.length];
-      const dur   = (1.4 + Math.random() * 1.1).toFixed(2) + 's';
-      const delay = (Math.random() * 1.5).toFixed(2) + 's';
-      s.style.cssText = `left:${pos.l}; top:${pos.t}; --tx:${pos.tx}; --ty:${pos.ty}; --dur:${dur}; --delay:${delay};`;
-      stage.appendChild(s);
-    });
-  }
-
-  if (isMaxHappy) {
-    const h = document.createElement('div');
-    h.className = 'effect heart-badge';
-    h.textContent = '💖';
-    stage.appendChild(h);
-  }
+  startMoodSpawner(stage, stateClass);
 }
 
 /* ============================================================
@@ -1164,6 +1248,7 @@ function renderHomeScene(pets) {
 }
 
 function showHome() {
+  if (moodSpawnInterval) { clearInterval(moodSpawnInterval); moodSpawnInterval = null; }
   currentView = 'home';
   document.getElementById('home-view').style.display = 'block';
   document.getElementById('profile-view').style.display = 'none';
@@ -1288,7 +1373,25 @@ function renderLastHatch(data) {
 /* ============================================================
    BOOT + LIVE POLLING
 ============================================================ */
-let initialized = false;
+let initialized  = false;
+let prevPetStats = {}; // name → { hunger, energy }
+
+function checkActionBursts(pets) {
+  if (!initialized) return;
+  if (currentView !== 'profile') return;
+  const pet = pets.find(p => p.name === currentPetName);
+  if (!pet) return;
+  const prev = prevPetStats[pet.name];
+  if (prev) {
+    const dragon = document.getElementById('pixelDragon');
+    const stage  = dragon?.parentElement;
+    if (stage) {
+      if (prev.hunger - pet.hunger >= 12)                              triggerActionBurst(stage, 'feed');
+      else if (prev.energy - pet.energy >= 12 && pet.energy > prev.energy - 40) triggerActionBurst(stage, 'play');
+    }
+  }
+  pets.forEach(p => { prevPetStats[p.name] = { hunger: p.hunger, energy: p.energy }; });
+}
 
 function loadData() {
   return fetch('pet_state.json?t=' + Date.now())
@@ -1296,11 +1399,14 @@ function loadData() {
     .then(data => {
       const pets     = data.pets || [];
       const featured = data.featured || pets[0]?.name;
+
+      checkActionBursts(pets);
       allPetsData = pets;
 
       if (!initialized) {
         initialized    = true;
         currentPetName = featured;
+        pets.forEach(p => { prevPetStats[p.name] = { hunger: p.hunger, energy: p.energy }; });
 
         showHome();
 
@@ -1317,6 +1423,7 @@ function loadData() {
           const current = pets.find(p => p.name === currentPetName) || pets[0];
           if (current) renderPet(current);
         }
+        pets.forEach(p => { prevPetStats[p.name] = { hunger: p.hunger, energy: p.energy }; });
       }
 
       renderLastHatch(data);
