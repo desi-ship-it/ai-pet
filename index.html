@@ -164,23 +164,7 @@
   }
   .scene-pet:hover .scene-pet-label { color: var(--parchment); }
 
-  .scene-sprite-img {
-    width: 110px;
-    height: 110px;
-    object-fit: contain;
-    display: block;
-    image-rendering: auto;
-  }
-
-  .scene-sprite-emoji {
-    font-size: 72px;
-    line-height: 1;
-    width: 110px;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  /* scene pixel sprites inherit display:inline-block from inline style */
 
   .scene-egg-img {
     width: 70px;
@@ -278,22 +262,9 @@
     50%       { transform: scale(1.12); opacity: 1; }
   }
 
-  .pixel-dragon { cursor: default; position: relative; }
-
-  /* Profile sprite image */
-  .pet-sprite-img {
-    width: 170px;
-    height: 170px;
-    object-fit: contain;
-    display: block;
-    image-rendering: auto;
-  }
-
-  .pet-sprite-emoji {
-    font-size: 130px;
-    line-height: 1;
-    width: 170px;
-    height: 170px;
+  .pixel-dragon {
+    cursor: default;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -861,17 +832,160 @@
 })();
 
 /* ============================================================
-   PET IMAGE MAPPING  —  name → image file
+   CSS PIXEL ART SPRITES
 ============================================================ */
-const PET_IMAGES = {
-  'Ember':       'ember.png',
-  'Wisp':        'wisp.png',
-  'Pebble':      'pebble.png',
-  'Baby_EmbPeb': 'babydragon.png',
+const SPRITES = {
+  dragon: {
+    colors: { D:'#7A0000',R:'#CC2200',O:'#FF6600',G:'#FFB300',W:'#AA5500',H:'#FFE066',F:'#FFEE00' },
+    rows: [
+      '..........H.....',
+      '.........DHD....',
+      '..W.....DRRRD...',
+      '.WWWW..DROOORD..',
+      'WWWWWDROOOGRD.F.',
+      '.WWWWDROOGGODF..',
+      '..WWWDROGGOD....',
+      '...WWDROOOOD....',
+      '....WDROOD......',
+      '.....DROOD......',
+      '....DROOD.......',
+      '...DROOD........',
+      '..DROD..........',
+      '.DRD............',
+      'DD..DOOD........',
+      '....DOOD........',
+    ]
+  },
+  babydragon: {
+    colors: { D:'#7A0000',R:'#CC2200',O:'#FF6600',G:'#FFB300',W:'#AA5500',H:'#FFE066',F:'#FFEE00' },
+    rows: [
+      '.......H....',
+      '......DHD...',
+      '.WW..DRRRD..',
+      'WWWWDROORD..',
+      'WWWWDROOGDF.',
+      '.WWWDROOGD..',
+      '..WWDROOOD..',
+      '...WDROAD...',
+      '....DROOD...',
+      '...DROOD....',
+      '..DROD......',
+      '.DRD........',
+      'DD..DOOD....',
+    ]
+  },
+  bunny: {
+    colors: { W:'#F5F0E8',P:'#FFB5C8',B:'#333333',K:'#CC6688' },
+    rows: [
+      '....WPW.WPW.....',
+      '....WPW.WPW.....',
+      '....WPW.WPW.....',
+      '....WPW.WPW.....',
+      '....WPW.WPW.....',
+      '....WWWWWWW.....',
+      '...WWWWWWWWW....',
+      '..WWWWWWWWWWW...',
+      '..WWWWWWWWWWW...',
+      '..WWWBWWWBWWW...',
+      '..WWWWWKWWWWW...',
+      '..WWWWWWWWWWW...',
+      '..WWWPPPPPWWW...',
+      '..WWWWWWWWWWW...',
+      '..WWWWWWWWWWW...',
+      '...WWWWW.WWWW...',
+    ]
+  },
+  cat: {
+    colors: { S:'#AAAAAA',D:'#555555',W:'#DDDDDD',B:'#222222',P:'#FF9999' },
+    rows: [
+      '..........DSW...',
+      '.........DSSWD..',
+      '........DSSSWD..',
+      '.......DPSSSSWD.',
+      '.......DSSSSSWD.',
+      '.......DSSSSSSD.',
+      '.......DSBSSSSD.',
+      '.......DSSSSSD..',
+      '......DSSSSSSSD.',
+      '.....DSSSSSSSD..',
+      '....DSSSSSSSD...',
+      'DSSSD.DSSSSSD...',
+      'DSSSD..DSSSSD...',
+      '.DSSSD..DSSSD...',
+      '..DSSD...DSSSD..',
+      '...DSD....DSSD..',
+    ]
+  },
+  dog: {
+    colors: { O:'#C8852A',D:'#5C3010',B:'#222222',K:'#442200',P:'#FF7799' },
+    rows: [
+      '.DBBD...DBBBD...',
+      'DBBBD...DBBBBD..',
+      'DBBBD...DBBBBD..',
+      'DBBBD.OOOOBBD...',
+      '.DBBDOOOOOOOBD..',
+      '.DOOOOOOOOOOOD..',
+      '.DOBOOOOOOOBOD..',
+      '.DOOOOOOOOOOOD..',
+      '.DOOOOKKOOOOD...',
+      '.DOOOOKKOOOOD...',
+      '.DOOOOOOOOOOOD..',
+      '.DOOOOPPPPOOOD..',
+      '..DOOOOOOOOOD...',
+      '..DOOOOOOOOD....',
+      '..DOOOD.DOOD....',
+      '...DOOD.DOOD....',
+    ]
+  },
+  fox: {
+    colors: { F:'#E86010',W:'#F5F0E0',D:'#662200',B:'#222222' },
+    rows: [
+      '..........DF....',
+      '.........DFFD...',
+      '........DFFFFD..',
+      '.......DFFFFFWD.',
+      '......DFFFFFWWD.',
+      '......DFFBFFWWD.',
+      '......DFFFFFWD..',
+      '.WWWWWDFFFFFD...',
+      'WWWWWWDFFFFFD...',
+      'WWWWWWDFFFFFD...',
+      'WWWWWWDFFFFD....',
+      '.WWWWWDFFFD.....',
+      '..WWWWDFFFD.....',
+      '...WWWDFD...DFD.',
+      '....WWDFD...DFD.',
+      '.......D.....D..',
+    ]
+  },
 };
 
-function petImageSrc(pet) {
-  return PET_IMAGES[pet.name] || null;
+function makeBoxShadow(rows, colors, unit) {
+  const s = [];
+  for (let y = 0; y < rows.length; y++) {
+    const row = rows[y];
+    for (let x = 0; x < row.length; x++) {
+      const c = row[x];
+      if (c !== '.') s.push(`${x*unit}px ${y*unit}px 0 ${unit-1}px ${colors[c]}`);
+    }
+  }
+  return s.join(',');
+}
+
+function spriteKey(pet) {
+  if (pet.name.startsWith('Baby_') && pet.species === 'dragon') return 'babydragon';
+  return pet.species in SPRITES ? pet.species : 'dragon';
+}
+
+function buildSpriteEl(pet, unit) {
+  const key = spriteKey(pet);
+  const spr = SPRITES[key] || SPRITES.dragon;
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `display:inline-block;position:relative;width:${spr.rows[0].length*unit}px;height:${spr.rows.length*unit}px;`;
+  const dot = document.createElement('div');
+  dot.style.cssText = `width:${unit}px;height:${unit}px;position:absolute;top:0;left:0;box-shadow:${makeBoxShadow(spr.rows,spr.colors,unit)};`;
+  wrap.appendChild(dot);
+  return wrap;
 }
 
 const SPECIES_GLOW = {
@@ -883,22 +997,9 @@ const SPECIES_GLOW = {
 };
 
 function buildPixelArt(pet) {
-  const el  = document.getElementById('pixelDragon');
+  const el = document.getElementById('pixelDragon');
   el.innerHTML = '';
-  const src = petImageSrc(pet);
-  if (src) {
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = pet.name;
-    img.className = 'pet-sprite-img';
-    img.draggable = false;
-    el.appendChild(img);
-  } else {
-    const em = document.createElement('div');
-    em.className = 'pet-sprite-emoji';
-    em.textContent = speciesEmoji(pet.species);
-    el.appendChild(em);
-  }
+  el.appendChild(buildSpriteEl(pet, 9));
   el.style.cssText = 'position:relative;';
   el.dataset.baseFilter = SPECIES_GLOW[pet.species] || SPECIES_GLOW.dragon;
 }
@@ -1047,19 +1148,8 @@ function renderHomeScene(pets) {
     const stateClass = moodStateFor(pet);
     const glow = SPECIES_GLOW[pet.species] || SPECIES_GLOW.dragon;
 
-    const src = petImageSrc(pet);
-    let spriteEl;
-    if (src) {
-      spriteEl = document.createElement('img');
-      spriteEl.src = src;
-      spriteEl.alt = pet.name;
-      spriteEl.draggable = false;
-      spriteEl.className = 'scene-sprite-img ' + stateClass;
-    } else {
-      spriteEl = document.createElement('div');
-      spriteEl.className = 'scene-sprite-emoji ' + stateClass;
-      spriteEl.textContent = speciesEmoji(pet.species);
-    }
+    const spriteEl = buildSpriteEl(pet, 7);
+    spriteEl.classList.add(stateClass);
     spriteEl.style.filter = NEUTRAL_STATES.includes(stateClass) ? glow : '';
 
     const label = document.createElement('div');
