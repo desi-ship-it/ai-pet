@@ -131,36 +131,41 @@
   }
 
   .scene-container {
-    position: relative;
     width: 100%;
-    max-width: 960px;
-    height: 480px;
-    margin: 8px auto 0;
-    padding: 0 16px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 16px 20px 80px;   /* big bottom pad keeps pets above coal glow */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px 24px;
   }
 
-  /* Ground line */
+  /* subtle ground shimmer */
   .scene-container::after {
     content: '';
-    position: absolute;
-    bottom: 0; left: 5%; right: 5%;
+    display: block;
+    width: 100%;
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(212,170,53,0.2), rgba(255,80,0,0.3), rgba(212,170,53,0.2), transparent);
+    margin-top: 8px;
   }
 
   .scene-pet {
-    position: absolute;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
     transition: transform 0.22s ease, filter 0.22s ease;
     z-index: 2;
     user-select: none;
+    /* stagger applied via inline style transform */
   }
   .scene-pet:hover {
-    transform: translateY(-10px) scale(1.06);
+    transform: translateY(calc(var(--stagger, 0px) - 12px)) scale(1.07) !important;
   }
   .scene-pet:hover .scene-pet-label { color: var(--parchment); }
 
@@ -175,17 +180,22 @@
 
   .scene-pet-label {
     font-family: 'Cinzel', serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.18em;
+    font-size: 0.62rem;
+    letter-spacing: 0.10em;
     text-transform: uppercase;
     color: var(--muted);
     text-align: center;
     transition: color 0.2s;
-    line-height: 1.4;
+    line-height: 1.5;
+    max-width: 120px;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   .scene-egg {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-size: 2.4rem;
     cursor: default;
     filter: drop-shadow(0 0 16px rgba(212,170,53,0.75));
@@ -1188,15 +1198,10 @@ function speciesEmoji(sp) {
 /* ============================================================
    HOME SCENE
 ============================================================ */
-const SCENE_POSITIONS = [
-  { left: '4%',  bottom: '18%' },
-  { left: '26%', bottom: '26%' },
-  { left: '54%', bottom: '15%' },
-  { left: '76%', bottom: '22%' },
-  { left: '16%', bottom: '52%' },
-  { left: '66%', bottom: '50%' },
-  { left: '40%', bottom: '60%' },
-];
+
+// Stagger pattern: vertical offsets (px) cycling through pets
+// Negative = raised, 0 = baseline — gives a natural clustered look
+const STAGGER_PX = [0, -22, -10, -32, -6, -28, -16, -38, -4, -20];
 
 let currentView    = 'home';
 let currentPetName = null;
@@ -1206,28 +1211,27 @@ function renderHomeScene(pets) {
   const container = document.getElementById('sceneContainer');
   container.innerHTML = '';
 
-  // Egg in scene
+  // Egg — sits as a flex item among the pets
   const eggEl = document.createElement('div');
   eggEl.className = 'scene-egg';
   eggEl.title = 'Ask Claude to hatch an egg';
-  eggEl.style.left   = '46%';
-  eggEl.style.bottom = '52%';
+  eggEl.style.transform = `translateY(${STAGGER_PX[Math.floor(pets.length / 2) % STAGGER_PX.length]}px)`;
   const eggImg = document.createElement('img');
   eggImg.className = 'scene-egg-img';
   eggImg.alt = 'mystery egg';
   eggImg.draggable = false;
-  eggImg.onerror = () => { eggEl.textContent = '🥚'; };
+  eggImg.onerror = () => { eggEl.innerHTML = '🥚'; };
   eggImg.src = 'egg.png';
   eggEl.appendChild(eggImg);
   container.appendChild(eggEl);
 
   pets.forEach((pet, i) => {
-    const pos = SCENE_POSITIONS[i % SCENE_POSITIONS.length];
-
     const petEl = document.createElement('div');
     petEl.className = 'scene-pet';
-    petEl.style.left   = pos.left;
-    petEl.style.bottom = pos.bottom;
+    // Stagger height for visual depth — applied with translateY so hover still works cleanly
+    const stagger = STAGGER_PX[i % STAGGER_PX.length];
+    petEl.style.setProperty('--stagger', stagger + 'px');
+    petEl.style.transform = `translateY(${stagger}px)`;
 
     const stateClass = moodStateFor(pet);
     const glow = SPECIES_GLOW[pet.species] || SPECIES_GLOW.dragon;
